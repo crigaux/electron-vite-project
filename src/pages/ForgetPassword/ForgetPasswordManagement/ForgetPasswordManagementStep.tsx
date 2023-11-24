@@ -2,7 +2,7 @@ import { useFormikContext } from 'formik'
 import { useTranslation } from 'react-i18next'
 import { ForgetPasswordFormik } from '../types.ts'
 import { toast } from 'sonner'
-import  {jwtDecode} from 'jwt-decode'
+import { jwtDecode } from 'jwt-decode'
 import { useNavigate } from 'react-router-dom'
 import ForgetPasswordManagement from './ForgetPasswordManagement.tsx'
 import {
@@ -41,7 +41,9 @@ export default function ForgetPasswordManagementStep(): JSX.Element {
     })
 
     if (!result?.data || result?.error) {
-      toast.error(result?.error?.data?.message)
+      toast.error(result?.error?.data?.message, {
+        position: 'bottom-right',
+      })
       return false
     }
 
@@ -49,7 +51,9 @@ export default function ForgetPasswordManagementStep(): JSX.Element {
       id: result?.data[0]?.user_id,
     })
 
-    toast.success(t('connection.emailValidation'))
+    toast.success(t('connection.emailValidation'), {
+      position: 'bottom-right',
+    })
     return true
   }
 
@@ -59,26 +63,34 @@ export default function ForgetPasswordManagementStep(): JSX.Element {
     if (!formIsValid) return false
 
     if (!token) {
-      toast.error(t('connection.invalidToken'))
+      toast.error(t('connection.invalidToken'), {
+        position: 'bottom-right',
+      })
       return false
     }
 
     const decodedToken: JWT = jwtDecode(token)
 
     if (Date.now() >= decodedToken.exp * 1000) {
-      toast.error(t('connection.expiredToken'))
+      toast.error(t('connection.expiredToken'), {
+        position: 'bottom-right',
+      })
       return false
     }
 
     const result: any = await getUserById(decodedToken.user_id)
 
     if (!result?.data || result?.error) {
-      toast.error(result?.error?.data?.message)
+      toast.error(result?.error?.data?.message, {
+        position: 'bottom-right',
+      })
       return false
     }
 
     if (result?.data?.user_id !== decodedToken.user_id) {
-      toast.error(t('connection.invalidToken'))
+      toast.error(t('connection.invalidToken'), {
+        position: 'bottom-right',
+      })
       return false
     }
 
@@ -88,11 +100,15 @@ export default function ForgetPasswordManagementStep(): JSX.Element {
     })
 
     if (!update?.data || update?.error) {
-      toast.error(update?.error?.data?.message)
+      toast.error(update?.error?.data?.message, {
+        position: 'bottom-right',
+      })
       return false
     }
 
-    toast.success(t('connection.passwordUpdated'))
+    toast.success(t('connection.passwordUpdated'), {
+      position: 'bottom-right',
+    })
 
     navigate(APP_ROUTES.LOGIN)
 

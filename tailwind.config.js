@@ -22,6 +22,11 @@ module.exports = {
             'box-sizing': 'border-box',
           },
 
+          // topBarDraggable settings
+          '.topBarDraggable': {
+            '-webkit-app-region': 'drag',
+          },
+
           // Logo settings
           '.logo': {
             height: '4rem',
@@ -56,7 +61,7 @@ module.exports = {
           '.card': {
             'box-shadow': '-5px 5px 15px 0px rgba(0, 0, 0, 0.15)',
             padding: '14px',
-            'border-radius': '15px',
+            'border-radius': '24px',
             gap: '15px',
             'max-height': '320px',
           },
@@ -69,14 +74,14 @@ module.exports = {
 
           // Card image settings
           '.card figure': {
-            'border-radius': '5.5px',
+            'border-radius': '14px',
           },
 
           // Button call settings
           '.btn-cta': {
             'border-radius': '15px',
-            width: '85px',
-            height: '85px',
+            width: '150px',
+            height: '150px',
             display: 'flex',
             'flex-direction': 'column',
             'justify-content': 'center',
@@ -196,6 +201,7 @@ module.exports = {
             border: 'none',
             outline: 'none',
             'outline-offset': 'none',
+            'box-shadow': '-5px 5px 15px 0px rgba(0, 0, 0, 0.15)',
           },
 
           // Alert settings

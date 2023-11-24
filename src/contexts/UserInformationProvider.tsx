@@ -40,7 +40,9 @@ function UserInformationProvider({
         localStorage.removeItem('token')
         localStorage.removeItem('mail')
         localStorage.removeItem('user')
-        toast.error(t('connection.expiredToken'))
+        toast.error(t('connection.expiredToken'), {
+          position: 'bottom-right',
+        })
       } else {
         setUserInformationToDefault(token)
       }

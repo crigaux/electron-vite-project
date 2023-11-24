@@ -30,7 +30,9 @@ export default function LoginManagementStep(): JSX.Element {
 
   useEffect(() => {
     if (fromValidateAccount) {
-      toast.success(t('connection.accountValidated'))
+      toast.success(t('connection.accountValidated'), {
+        position: 'bottom-right',
+      })
     }
   }, [])
 
@@ -43,14 +45,18 @@ export default function LoginManagementStep(): JSX.Element {
       })
 
       if (!result?.data || result?.error) {
-        toast.error(result?.error?.data?.message)
+        toast.error(result?.error?.data?.message, {
+          position: 'bottom-right',
+        })
         return
       }
 
       window.localStorage.setItem('mail', values.mail)
       window.localStorage.setItem('user', JSON.stringify(result?.data[0]))
 
-      toast.success(t('connection.connected'))
+      toast.success(t('connection.connected'), {
+        position: 'bottom-right',
+      })
 
       setTimeout(() => {
         navigate(APP_ROUTES.HOME)
@@ -71,7 +77,9 @@ export default function LoginManagementStep(): JSX.Element {
     })
 
     if (!result?.data || result?.error) {
-      toast.error(result?.error?.data?.message)
+      toast.error(result?.error?.data?.message, {
+        position: 'bottom-right',
+      })
       return false
     }
 

@@ -12,6 +12,7 @@ import authSlice from '../features/auth/authSlice.ts'
 import authApi from '../features/auth/authApi.ts'
 import bookmarkSlice from '../features/bookmark/bookmarkSlice.ts'
 import bookmarkApi from '../features/bookmark/bookmarkApi.ts'
+import appointmentApi from '../features/appointment/appointmentApi.ts'
 import agencySlice from '../features/agency/agencySlice.ts'
 import agencyApi from '../features/agency/agencyApi.ts'
 import countrySlice from '../features/country/countrySlice.ts'
@@ -23,6 +24,8 @@ import mailApi from '../features/mail/mailApi.ts'
 import attachmentApi from '../features/attachment/attachmentApi.ts'
 import tagApi from '../features/tag/tagApi.ts'
 import propertyTypeApi from '../features/propertyType/propertyTypeApi.ts'
+import statusApi from '../features/status/statusApi.ts'
+import appointmentTagApi from '../features/appointmentTag/appointmentTagApi.ts'
 
 export const store = configureStore({
   reducer: {
@@ -48,6 +51,9 @@ export const store = configureStore({
     [attachmentApi.reducerPath]: attachmentApi.reducer,
     [tagApi.reducerPath]: tagApi.reducer,
     [propertyTypeApi.reducerPath]: propertyTypeApi.reducer,
+    [statusApi.reducerPath]: statusApi.reducer,
+    [appointmentApi.reducerPath]: appointmentApi.reducer,
+    [appointmentTagApi.reducerPath]: appointmentTagApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -66,7 +72,10 @@ export const store = configureStore({
       .concat([mailApi.middleware])
       .concat([attachmentApi.middleware])
       .concat([tagApi.middleware])
-      .concat([propertyTypeApi.middleware]),
+      .concat([propertyTypeApi.middleware])
+      .concat([statusApi.middleware])
+      .concat([appointmentApi.middleware])
+      .concat([appointmentTagApi.middleware]),
   devTools: true,
 })
 

@@ -7,21 +7,23 @@ import { selectedPropertyId } from '../../../features/property/propertySlice.ts'
 
 export default function usePropertyFormik() {
   // get id from URI path
-  const property_id = useAppSelector(selectedPropertyId) as number
+  const propertyId = useAppSelector(selectedPropertyId) as number
 
   const [triggerPoperty, propertyQuery] = useLazyGetPropertyByIdQuery({})
 
   useEffect(() => {
-    if (property_id) {
-      triggerPoperty(Number(property_id))
+    if (propertyId === -1) return
+    if (propertyId) {
+      triggerPoperty(Number(propertyId))
     }
-  }, [property_id])
+  }, [propertyId])
 
   const initialValues = useMemo(() => {
+    if (propertyId === -1) return {}
     if (propertyQuery.data) {
       return propertyQuery.data
     }
-  }, [propertyQuery.data]) as PropertySerializerRead
+  }, [propertyQuery.data, propertyId]) as PropertySerializerRead
 
   const propertyFormik = useFormik({
     initialValues,

@@ -6,15 +6,21 @@
     "dev": "vite",
     "build": "tsc && vite build && electron-builder",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "openapi:generate": "rm -rf src/api && openapi-generator-cli generate -i https://back-rently.mathieudacheux.fr/doc/swagger.json -g typescript-redux-query --additional-properties withSeparateModelsAndApi=true,modelPropertyNaming=snake_case,modelPackage=models -o src/api --skip-validate-spec && mv src/api/src/* src/api && rm -rf src/api/src && rm -rf src/api/.openapi-generator && rm -rf src/api/.gitignore && rm -rf src/api/tsconfig.json && rm -rf src/api/.openapi-generator-ignore"
   },
   "dependencies": {
+    "@fullcalendar/core": "^6.1.9",
+    "@fullcalendar/daygrid": "^6.1.9",
+    "@fullcalendar/react": "^6.1.9",
     "@reduxjs/toolkit": "^1.9.7",
+    "@types/fullcalendar": "^3.8.0",
     "@types/leaflet": "^1.9.8",
     "formik": "^2.4.5",
     "html-react-parser": "^5.0.6",
     "i18next": "^23.7.6",
     "jwt-decode": "^4.0.0",
+    "openapi": "^1.0.1",
     "prettier": "^3.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -24,6 +30,7 @@
     "react-leaflet-cluster": "^2.1.0",
     "react-redux": "^8.1.3",
     "react-router-dom": "^6.19.0",
+    "redux-query": "^3.6.1",
     "sonner": "^1.2.0",
     "vite-tsconfig-paths": "^4.2.1",
     "yup": "^1.3.2"

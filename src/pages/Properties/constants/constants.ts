@@ -24,6 +24,9 @@ const dpeList = [
 ]
 
 const surfaceList = [
+  { value: 0, label: '0m² min' },
+  { value: 50, label: '50m² min' },
+  { value: 100, label: '100m² min' },
   { value: 200, label: '200m² min' },
   { value: 400, label: '400m² min' },
   { value: 600, label: '600m² min' },

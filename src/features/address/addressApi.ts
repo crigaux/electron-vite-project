@@ -16,9 +16,16 @@ const agencyApi = createApi({
     getAddressById: builder.query({
       query: (id) => `addresses/${id}`,
     }),
+    createAddress: builder.mutation({
+      query: (newAddress) => ({
+        url: 'addresses',
+        method: 'POST',
+        body: newAddress,
+      }),
+    }),
   }),
 })
 
-export const { useGetAddressByIdQuery } = agencyApi
+export const { useGetAddressByIdQuery, useCreateAddressMutation } = agencyApi
 
 export default agencyApi

@@ -5,12 +5,14 @@ export default function Button({
   icon,
   rounded,
   className = '',
+  fontSize = 'sm',
   onClick,
 }: {
   text: string
   icon?: React.ReactNode
   rounded?: boolean
   className?: string
+  fontSize?: 'sm' | 'md' | 'lg'
   onClick?: () => void
 }): JSX.Element {
   const { t } = useTranslation()
@@ -22,7 +24,7 @@ export default function Button({
       onClick={onClick}
     >
       {icon && <div className='mr-2'>{icon}</div>}
-      <div className='text-sm'>{t(text)}</div>
+      <div className={`text-${fontSize}`}>{t(text)}</div>
     </button>
   )
 }

@@ -17,9 +17,9 @@ export default function LoginManagement({
   const [showPassword, setShowPassword] = useState<boolean>(false)
 
   return (
-    <div className='w-full flex flex-col md:flex-row items-center md:justify-center h-[100vh]'>
+    <div className='w-full flex flex-col md:flex-row items-center md:justify-center h-[calc(100vh-30px)]'>
       <img
-        className='w-full md:w-1/2 object-cover md:rounded-tr-[15px] hidden md:block 
+        className='w-1/2 object-cover hidden md:block 
         h-full
         '
         src={LoginImage}

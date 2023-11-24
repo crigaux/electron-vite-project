@@ -45,8 +45,6 @@ export default function PropertiesManagementStep() {
     )
   }, [values.search, properties])
 
-  console.log(propertiesQuery.data)
-
   const handleSearch = ({ search }: { search: string }) => {
     return properties.filter(
       (property) =>

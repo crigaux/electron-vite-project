@@ -17,7 +17,11 @@ function createWindow() {
       preload: path.join(__dirname, 'preload.js'),
     },
     titleBarStyle: 'hidden',
-    titleBarOverlay: true,
+    titleBarOverlay: {
+      color: '#4A43EC',
+      symbolColor: 'white',
+      height: 30,
+    },
   })
 
   // Test active push message to Renderer-process.

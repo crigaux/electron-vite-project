@@ -4,9 +4,13 @@ import Button from '../../../../components/atoms/Button'
 import Typography from '../../../../components/atoms/Typography'
 import FormikTextArea from '../../../../components/molecules/core/FormikTextArea'
 import FormikTextField from '../../../../components/molecules/core/FormikTextField'
-import { useUpdatePropertyMutation } from '../../../../features/property/propertyApi'
+import {
+  useCreatePropertyMutation,
+  useUpdatePropertyMutation,
+} from '../../../../features/property/propertyApi'
 import { setSelectedPropertyId } from '../../../../features/property/propertySlice'
 import { useAppDispatch } from '../../../../store/store'
+import { useCreateAddressMutation } from '../../../../features/address/addressApi'
 
 export default function PropertyDetailsSecondStep({
   property,
@@ -21,8 +25,16 @@ export default function PropertyDetailsSecondStep({
   const dispatch = useAppDispatch()
 
   const [updateProperty] = useUpdatePropertyMutation()
+  const [createProperty] = useCreatePropertyMutation()
+  const [createAddress] = useCreateAddressMutation()
 
-  const patchProperty = async () => {
+  console.log(values)
+
+  const currentAgency = JSON.parse(
+    localStorage.getItem('user') as string,
+  ).agency_id
+
+  const patchProperty = async ({ draft }: { draft: boolean }) => {
     const response = await updateProperty({
       id: property.property_id,
       name: values.name,
@@ -48,11 +60,70 @@ export default function PropertyDetailsSecondStep({
       garage: values.garage,
       work_done: values.work_done,
       life_annuity: values.life_annuity,
+      status_id: values.status_id,
       ground_floor: values.ground_floor,
       land_size_1: values.land_size_1,
       garden: values.garden,
       updated_at: new Date(),
       dpe: values.dpe,
+      year_construction: values.year_construction,
+      draft,
+    }).unwrap()
+
+    if (response.error) return false
+
+    return true
+  }
+
+  const postProperty = async ({ draft }: { draft: boolean }) => {
+    const addressResponse = await createAddress({
+      address: values.way,
+      city: values.city,
+      zipcode: values.zipcode,
+      longitude: 0,
+      latitude: 0,
+    }).unwrap()
+
+    console.log(addressResponse)
+
+    if (!addressResponse) return false
+
+    const response = await createProperty({
+      name: values.name,
+      description: values.description,
+      price: Number(values.price),
+      surface: values.surface,
+      land_size: values.land_size,
+      bathroom: Number(values.bathroom),
+      kitchen: Number(values.kitchen),
+      toilet: Number(values.toilet),
+      bedroom: Number(values.bedroom),
+      elevator: values.elevator || false,
+      balcony: values.balcony || false,
+      terrace: values.terrace || false,
+      cellar: values.cellar || false,
+      parking: values.parking || false,
+      number_room: Number(values.number_room),
+      pool: values.pool || false,
+      caretaker: values.caretaker || false,
+      fiber_deployed: values.fiber_deployed || false,
+      duplex: values.duplex || false,
+      top_floor: values.top_floor || false,
+      garage: values.garage || false,
+      work_done: values.work_done || false,
+      life_annuity: values.life_annuity || false,
+      ground_floor: values.ground_floor || false,
+      land_size_1: values.land_size_1 || 0,
+      garden: values.garden || false,
+      updated_at: new Date(),
+      dpe: Number(values.dpe),
+      year_construction: values.year_construction,
+      property_type: Number(values.property_type),
+      owner_id: values.owner_id,
+      address_id: addressResponse.address_id,
+      status_id: values.status_id,
+      agency_id: currentAgency,
+      draft,
     }).unwrap()
 
     if (response.error) return false
@@ -60,72 +131,103 @@ export default function PropertyDetailsSecondStep({
     return true
   }
   return (
-    property && (
-      <>
-        <div className='w-full h-[250px] p-1 rounded-md'>
+    <>
+      <div className='w-full h-[250px] p-1 rounded-md'>
+        {images ? (
           <img
             src={`https://back-rently.mathieudacheux.fr/public/img/property/${property?.property_id}/${images[0]}`}
             alt='property'
             key={`${property.property_id}-${images[0]}`}
             className='property-image h-full w-full rounded-md object-center'
           />
-        </div>
-        <div className='w-11/12'>
-          <div className=' flex flex-col items-start my-4'>
-            <Typography variant='h1' className='text-center'>
-              Caractéristiques du bien
-            </Typography>
-            <div className='w-full flex justify-between'>
+        ) : (
+          <div className='w-full h-full flex justify-center items-center rounded-md bg-neutral-300'>
+            <Typography variant='h1'>Pas d'image</Typography>
+          </div>
+        )}
+      </div>
+      <div className='w-11/12'>
+        <div className=' flex flex-col items-start my-4'>
+          <Typography variant='h1' className='text-center'>
+            Caractéristiques du bien
+          </Typography>
+          <div className='w-full flex justify-between'>
+            <div className='w-full mt-4'>
+              <FormikTextArea
+                name='description'
+                label='Description'
+                placeholder='Petite maison en plein centre ville...'
+              />
+            </div>
+          </div>
+
+          <div className='w-full flex justify-between'>
+            <div className='w-[45%] mt-4 flex flex-col items-start'>
+              <Typography variant='h1' className='text-center'>
+                Adresse
+              </Typography>
               <div className='w-full mt-4'>
-                <FormikTextArea name='description' label='Description' />
+                <FormikTextField
+                  name='way'
+                  label='Adresse'
+                  placeholder='12 rue de la paix'
+                />
+              </div>
+              <div className='flex justify-between w-full'>
+                <div className='w-[45%] mt-4'>
+                  <FormikTextField
+                    name='city'
+                    label='Ville'
+                    placeholder='Paris'
+                  />
+                </div>
+
+                <div className='w-[45%] mt-4'>
+                  <FormikTextField
+                    name='zipcode'
+                    label='Code postal'
+                    placeholder='75000'
+                  />
+                </div>
               </div>
             </div>
-
-            <div className='w-full flex justify-between'>
-              <div className='w-[45%] mt-4 flex flex-col items-start'>
-                <Typography variant='h1' className='text-center'>
-                  Adresse
-                </Typography>
-                <div className='w-full mt-4'>
-                  <FormikTextField name='way' label='Adresse' />
-                </div>
-                <div className='flex justify-between w-full'>
-                  <div className='w-[45%] mt-4'>
-                    <FormikTextField name='city' label='Ville' />
-                  </div>
-
-                  <div className='w-[45%] mt-4'>
-                    <FormikTextField name='zipcode' label='Code postal' />
-                  </div>
-                </div>
-              </div>
-              <div className='w-1/2 mt-4'>
-                <FormikTextArea name='note' label='Note' height={200} />
-              </div>
-            </div>
-          </div>
-
-          <div className='flex w-full justify-center'>
-            <div className='flex w-1/2 justify-between'>
-              <Button text='Précédent' onClick={() => setStep(1)} />
-              <Button
-                text='Sauvegarder'
-                onClick={async () => {
-                  const isSaved = await patchProperty()
-                  if (!isSaved) return
-                  dispatch(setSelectedPropertyId({ selectedPropertyId: null }))
-                }}
-              />
-              <Button
-                text='Créer un brouillon'
-                onClick={() =>
-                  dispatch(setSelectedPropertyId({ selectedPropertyId: null }))
-                }
+            <div className='w-1/2 mt-4'>
+              <FormikTextArea
+                name='note'
+                label='Note'
+                height={200}
+                placeholder='Bonne isolation...'
               />
             </div>
           </div>
         </div>
-      </>
-    )
+
+        <div className='flex w-full justify-center mt-2'>
+          <div className='flex w-1/3 justify-between'>
+            <Button text='Précédent' onClick={() => setStep(1)} />
+            <Button
+              text='Sauvegarder'
+              onClick={async () => {
+                const isSaved = property.property_id
+                  ? await patchProperty({ draft: false })
+                  : await postProperty({ draft: false })
+                if (!isSaved) return
+                dispatch(setSelectedPropertyId({ selectedPropertyId: null }))
+              }}
+            />
+            <Button
+              text='Brouillon'
+              onClick={async () => {
+                const isSaved = property.property_id
+                  ? await patchProperty({ draft: true })
+                  : await postProperty({ draft: true })
+                if (!isSaved) return
+                dispatch(setSelectedPropertyId({ selectedPropertyId: null }))
+              }}
+            />
+          </div>
+        </div>
+      </div>
+    </>
   )
 }

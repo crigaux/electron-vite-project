@@ -47,6 +47,8 @@ export default function FormikSelect({
       )
     }
 
+    const buffer = [...options]
+
     return [
       <option
         key={field.name}
@@ -56,7 +58,7 @@ export default function FormikSelect({
       >
         {placeholder}
       </option>,
-      ...options
+      ...buffer
         .sort((a, b) => Number(a?.disabled ?? 1) - Number(b?.disabled ?? 1))
         .map((item) => (
           <option
