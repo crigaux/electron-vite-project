@@ -150,15 +150,6 @@ export default function MessagesManagement() {
     [selectedConversation?.user_id],
   )
 
-  messages.forEach((message: any, index: number) => {
-    console.log(message.createdAt)
-
-    console.log(
-      new Date(message.createdAt).getDay(),
-      new Date(messages[index - 1]?.createdAt).getDay(),
-    )
-  })
-
   return (
     <div className='w-full h-full flex flex-col-reverse'>
       <MainContainer>
