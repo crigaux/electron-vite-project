@@ -1,3 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.cs-message--outgoing .cs-message__content {
+  background-color: #4a43ec !important;
+  color: white !important;
+}
+.cs-message--incoming .cs-message__content {
+  background-color: #159dff6c !important;
+  color: rgb(83, 83, 83) !important;
+}
+
+.cs-message__content-wrapper {
+  max-width: 800px;
+}

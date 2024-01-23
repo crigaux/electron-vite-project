@@ -6,6 +6,7 @@ import Properties from '../../Properties/Properties'
 import Agents from '../../Agents/Agents'
 import Calendar from '../../Calendar/Calendar'
 import Navbar from '../../../components/organisms/Navbar'
+import Messages from '../../Messages/Messages'
 
 export default function HomeManagement() {
   const [tab, setTab] = useState(1)
@@ -23,7 +24,7 @@ export default function HomeManagement() {
         {tab === 4 && <div>Users</div>}
         {tab === 5 && <div>Profil</div>}
         {tab === 6 && <Calendar />}
-        {tab === 7 && <div>Profil</div>}
+        {tab === 7 && <Messages />}
         {tab === 8 && <div>Profil</div>}
       </div>
     </div>
