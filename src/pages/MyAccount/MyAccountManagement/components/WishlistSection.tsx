@@ -1,12 +1,12 @@
 import { useTranslation } from 'react-i18next'
-import Typography from '../../../../components/atoms/Typography.tsx'
-import { useGetBookmarksByUserIdQuery } from '../../../../features/bookmark/bookmarkApi.ts'
 import { PropertySerializerRead } from '../../../../api/index.ts'
+import Typography from '../../../../components/atoms/Typography.tsx'
 import PropertyCard from '../../../../components/organisms/PropertyCard.tsx'
+import { useGetBookmarksByUserIdQuery } from '../../../../features/bookmark/bookmarkApi.ts'
 
 export default function WishlistSection(): JSX.Element {
   const { t } = useTranslation()
-  const userId = JSON.parse(localStorage.getItem('user') || '{}')[0].user_id
+  const userId = JSON.parse(localStorage.getItem('user') || '{}').user_id
 
   const { data: bookmarks } = useGetBookmarksByUserIdQuery(userId)
 

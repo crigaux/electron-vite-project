@@ -1,0 +1,6 @@
+const STATUS_MESSAGES = {
+  SENT: 'SENT',
+  RECEIVED: 'RECEIVED',
+}
+
+export { STATUS_MESSAGES }

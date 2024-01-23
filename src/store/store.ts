@@ -1,31 +1,32 @@
 // eslint-disable-next-line import/named
-import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit'
-import userSlice from '../features/user/userSlice.ts'
-import userApi from '../features/user/userApi.ts'
-import propertySlice from '../features/property/propertySlice.ts'
-import propertyApi from '../features/property/propertyApi.ts'
-import articleSlice from '../features/article/articleSlice.ts'
-import articleApi from '../features/article/articleApi.ts'
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import addressApi from '../features/address/addressApi.ts'
-import authSlice from '../features/auth/authSlice.ts'
-import authApi from '../features/auth/authApi.ts'
-import bookmarkSlice from '../features/bookmark/bookmarkSlice.ts'
-import bookmarkApi from '../features/bookmark/bookmarkApi.ts'
-import appointmentApi from '../features/appointment/appointmentApi.ts'
-import agencySlice from '../features/agency/agencySlice.ts'
 import agencyApi from '../features/agency/agencyApi.ts'
-import countrySlice from '../features/country/countrySlice.ts'
-import countryApi from '../features/country/countryApi.ts'
-import roleSlice from '../features/role/roleSlice.ts'
-import roleApi from '../features/role/roleApi.ts'
-import sectorApi from '../features/sector/sectorApi.ts'
-import mailApi from '../features/mail/mailApi.ts'
-import attachmentApi from '../features/attachment/attachmentApi.ts'
-import tagApi from '../features/tag/tagApi.ts'
-import propertyTypeApi from '../features/propertyType/propertyTypeApi.ts'
-import statusApi from '../features/status/statusApi.ts'
+import agencySlice from '../features/agency/agencySlice.ts'
+import appointmentApi from '../features/appointment/appointmentApi.ts'
 import appointmentTagApi from '../features/appointmentTag/appointmentTagApi.ts'
+import articleApi from '../features/article/articleApi.ts'
+import articleSlice from '../features/article/articleSlice.ts'
+import attachmentApi from '../features/attachment/attachmentApi.ts'
+import authApi from '../features/auth/authApi.ts'
+import authSlice from '../features/auth/authSlice.ts'
+import bookmarkApi from '../features/bookmark/bookmarkApi.ts'
+import bookmarkSlice from '../features/bookmark/bookmarkSlice.ts'
+import countryApi from '../features/country/countryApi.ts'
+import countrySlice from '../features/country/countrySlice.ts'
+import mailApi from '../features/mail/mailApi.ts'
+import messageApi from '../features/messages/messagesApi.ts'
+import propertyApi from '../features/property/propertyApi.ts'
+import propertySlice from '../features/property/propertySlice.ts'
+import propertyTypeApi from '../features/propertyType/propertyTypeApi.ts'
+import roleApi from '../features/role/roleApi.ts'
+import roleSlice from '../features/role/roleSlice.ts'
+import sectorApi from '../features/sector/sectorApi.ts'
+import statusApi from '../features/status/statusApi.ts'
+import tagApi from '../features/tag/tagApi.ts'
+import userApi from '../features/user/userApi.ts'
+import userSlice from '../features/user/userSlice.ts'
 
 export const store = configureStore({
   reducer: {
@@ -54,6 +55,7 @@ export const store = configureStore({
     [statusApi.reducerPath]: statusApi.reducer,
     [appointmentApi.reducerPath]: appointmentApi.reducer,
     [appointmentTagApi.reducerPath]: appointmentTagApi.reducer,
+    [messageApi.reducerPath]: messageApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -75,7 +77,8 @@ export const store = configureStore({
       .concat([propertyTypeApi.middleware])
       .concat([statusApi.middleware])
       .concat([appointmentApi.middleware])
-      .concat([appointmentTagApi.middleware]),
+      .concat([appointmentTagApi.middleware])
+      .concat([messageApi.middleware]),
   devTools: true,
 })
 

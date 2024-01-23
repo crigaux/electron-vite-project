@@ -1,10 +1,10 @@
-import { useMemo } from 'react'
 import { useFormikContext } from 'formik'
-import Searchbar from '../../../components/organisms/Searchbar'
-import AgentCard from '../components/AgentCard'
+import { useMemo } from 'react'
 import { RoleSerializerRead, UserSerializerRead } from '../../../api'
-import { useGetUserByFilterQuery } from '../../../features/user/userApi'
+import Searchbar from '../../../components/organisms/Searchbar'
 import { useGetRolesQuery } from '../../../features/role/roleApi'
+import { useGetUserByFilterQuery } from '../../../features/user/userApi'
+import AgentCard from '../components/AgentCard'
 
 export default function AgentsManagement(): JSX.Element {
   const { values } = useFormikContext<{ searchAgent: string }>()
@@ -15,8 +15,8 @@ export default function AgentsManagement(): JSX.Element {
 
   const roles = useGetRolesQuery({}).data || []
   const agentRole = roles.find(
-    (role: RoleSerializerRead) => role.name === 'Agent',
-  )
+    (role: RoleSerializerRead) => role.name === 'AGENT',
+  )?.role_id
 
   const agents =
     useGetUserByFilterQuery({ role: agentRole, agency_id: currentAgency })
@@ -25,16 +25,17 @@ export default function AgentsManagement(): JSX.Element {
   const filteredAgents = useMemo(() => {
     if (values.searchAgent?.length < 3) return agents
 
-    return agents.filter(
-      (agent: UserSerializerRead) =>
-        agent?.name?.toLowerCase()?.includes(values.searchAgent?.toLowerCase()),
-    )
+    return agents.filter((agent: UserSerializerRead) => {
+      const fullName = `${agent?.name} ${agent?.firstname}`
+      return fullName.toLowerCase().includes(values.searchAgent.toLowerCase())
+    })
   }, [values.searchAgent, agents])
+
   const handleSearch = ({ search }: { search: string }) => {
-    return agents.filter(
-      (agent: UserSerializerRead) =>
-        agent?.name?.toLowerCase()?.includes(search.toLowerCase()),
-    )
+    return agents.filter((agent: UserSerializerRead) => {
+      const fullName = `${agent?.name} ${agent?.firstname}`
+      return fullName.toLowerCase().includes(search.toLowerCase())
+    })
   }
 
   return (
