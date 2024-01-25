@@ -1,24 +1,26 @@
 import { useTranslation } from 'react-i18next'
-import CardButton from '../atoms/CardButton.tsx'
-import Typography from '../atoms/Typography.tsx'
-import Bed from '../atoms/icons/Bed.tsx'
-import Bath from '../atoms/icons/Bath.tsx'
 import {
   PropertySerializerRead,
   StatusSerializerRead,
 } from '../../api/index.ts'
-import Tree from '../atoms/icons/Tree.tsx'
 import { useGetAllFolderImageQuery } from '../../features/attachment/attachmentApi.ts'
-import { useAppDispatch } from '../../store/store.ts'
 import { setSelectedPropertyId } from '../../features/property/propertySlice.ts'
 import { useGetStatusQuery } from '../../features/status/statusApi.ts'
+import { useAppDispatch } from '../../store/store.ts'
+import CardButton from '../atoms/CardButton.tsx'
+import Typography from '../atoms/Typography.tsx'
+import Bath from '../atoms/icons/Bath.tsx'
+import Bed from '../atoms/icons/Bed.tsx'
+import Tree from '../atoms/icons/Tree.tsx'
 
 export default function PropertyCard({
   mapOpened,
   property,
+  handleClick,
 }: {
   mapOpened?: boolean
   property: PropertySerializerRead
+  handleClick?: () => void
 }): JSX.Element {
   const { t } = useTranslation()
 
@@ -34,15 +36,16 @@ export default function PropertyCard({
     <div
       id={String(property?.property_id)}
       className={`card ${
-        !mapOpened ? 'w-[350px]' : 'flex-row w-full h-[220px]'
+        !mapOpened ? 'w-[350px] min-w-[250px]' : 'flex-row w-full min-h-[220px]'
       } hover:cursor-pointer relative`}
-      onClick={() =>
+      onClick={() => {
         dispatch(
           setSelectedPropertyId({
             selectedPropertyId: Number(property?.property_id),
           }),
         )
-      }
+        handleClick?.()
+      }}
     >
       {(property?.draft || property?.status_id) && (
         <div className='absolute top-[14px] right-[14px] flex gap-2 text-white'>

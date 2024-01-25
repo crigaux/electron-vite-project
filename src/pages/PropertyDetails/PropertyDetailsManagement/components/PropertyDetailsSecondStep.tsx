@@ -4,22 +4,26 @@ import Button from '../../../../components/atoms/Button'
 import Typography from '../../../../components/atoms/Typography'
 import FormikTextArea from '../../../../components/molecules/core/FormikTextArea'
 import FormikTextField from '../../../../components/molecules/core/FormikTextField'
+import { useCreateAddressMutation } from '../../../../features/address/addressApi'
 import {
   useCreatePropertyMutation,
   useUpdatePropertyMutation,
 } from '../../../../features/property/propertyApi'
 import { setSelectedPropertyId } from '../../../../features/property/propertySlice'
 import { useAppDispatch } from '../../../../store/store'
-import { useCreateAddressMutation } from '../../../../features/address/addressApi'
 
 export default function PropertyDetailsSecondStep({
   property,
   images,
   setStep,
+  selectedImage,
+  openModal,
 }: {
   property: PropertySerializerRead
   images: string[]
   setStep: (step: number) => void
+  selectedImage: number
+  openModal: () => void
 }) {
   const { values } = useFormikContext<PropertySerializerRead>()
   const dispatch = useAppDispatch()
@@ -27,8 +31,6 @@ export default function PropertyDetailsSecondStep({
   const [updateProperty] = useUpdatePropertyMutation()
   const [createProperty] = useCreatePropertyMutation()
   const [createAddress] = useCreateAddressMutation()
-
-  console.log(values)
 
   const currentAgency = JSON.parse(
     localStorage.getItem('user') as string,
@@ -75,16 +77,26 @@ export default function PropertyDetailsSecondStep({
     return true
   }
 
+  const getCoordonates = async () => {
+    const response = await fetch(
+      `https://api-adresse.data.gouv.fr/search/?q=${values.way} ${values.zipcode} ${values.city}`,
+    )
+    const result = await response.json()
+    const features = result.features
+    const coordinates = features[0].geometry.coordinates
+    return coordinates
+  }
+
   const postProperty = async ({ draft }: { draft: boolean }) => {
+    const coordonates = await getCoordonates()
+
     const addressResponse = await createAddress({
       address: values.way,
       city: values.city,
       zipcode: values.zipcode,
-      longitude: 0,
-      latitude: 0,
+      longitude: coordonates?.[0] ?? 0,
+      latitude: coordonates?.[1] ?? 0,
     }).unwrap()
-
-    console.log(addressResponse)
 
     if (!addressResponse) return false
 
@@ -132,12 +144,12 @@ export default function PropertyDetailsSecondStep({
   }
   return (
     <>
-      <div className='w-full h-[250px] p-1 rounded-md'>
+      <div className='w-full h-[250px] p-1 rounded-md' onClick={openModal}>
         {images ? (
           <img
-            src={`https://back-rently.mathieudacheux.fr/public/img/property/${property?.property_id}/${images[0]}`}
+            src={`https://back-rently.mathieudacheux.fr/public/img/property/${property?.property_id}/${images[selectedImage]}`}
             alt='property'
-            key={`${property.property_id}-${images[0]}`}
+            key={`${property.property_id}-${images[selectedImage]}`}
             className='property-image h-full w-full rounded-md object-center'
           />
         ) : (
@@ -176,17 +188,16 @@ export default function PropertyDetailsSecondStep({
               <div className='flex justify-between w-full'>
                 <div className='w-[45%] mt-4'>
                   <FormikTextField
-                    name='city'
-                    label='Ville'
-                    placeholder='Paris'
-                  />
-                </div>
-
-                <div className='w-[45%] mt-4'>
-                  <FormikTextField
                     name='zipcode'
                     label='Code postal'
                     placeholder='75000'
+                  />
+                </div>
+                <div className='w-[45%] mt-4'>
+                  <FormikTextField
+                    name='city'
+                    label='Ville'
+                    placeholder='Paris'
                   />
                 </div>
               </div>

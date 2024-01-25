@@ -1,6 +1,6 @@
 import { useFormikContext } from 'formik'
-import PropertyDetailsDetailsManagement from './PropertyDetailsManagement.tsx'
 import { PropertySerializerRead } from '../../../api/index.ts'
+import PropertyDetailsDetailsManagement from './PropertyDetailsManagement.tsx'
 
 export default function PropertyDetailsManagementStep() {
   const { values } = useFormikContext<PropertySerializerRead>()

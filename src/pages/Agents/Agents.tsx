@@ -1,13 +1,22 @@
 import { FormikProvider } from 'formik'
-import useAgentListFormik from './hooks/useAgentListFormik'
 import AgentsManagement from './AgentsManagement/AgentsManagement'
+import useAgentListFormik from './hooks/useAgentListFormik'
 
-export default function Agents(): JSX.Element {
+export default function Agents({
+  handleAppointment,
+  handleContact,
+}: {
+  handleAppointment: () => void
+  handleContact: () => void
+}): JSX.Element {
   const { agentsFormik } = useAgentListFormik()
 
   return (
     <FormikProvider value={agentsFormik}>
-      <AgentsManagement />
+      <AgentsManagement
+        handleAppointment={handleAppointment}
+        handleContact={handleContact}
+      />
     </FormikProvider>
   )
 }

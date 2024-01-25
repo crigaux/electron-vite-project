@@ -13,7 +13,7 @@ export default function Button({
   rounded?: boolean
   className?: string
   fontSize?: 'sm' | 'md' | 'lg'
-  onClick?: () => void
+  onClick?: (e: any) => void
 }): JSX.Element {
   const { t } = useTranslation()
   return (
@@ -21,7 +21,7 @@ export default function Button({
       className={`${
         rounded ? 'roundedBtn' : 'btn'
       } md:btn-md lg:btn-md bg-primary hover:bg-primary text-white border-0 flex justify-between items-center ${className}`}
-      onClick={onClick}
+      onClick={(e) => onClick?.(e)}
     >
       {icon && <div className='mr-2'>{icon}</div>}
       <div className={`text-${fontSize}`}>{t(text)}</div>

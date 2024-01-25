@@ -2,11 +2,21 @@ import { useFormikContext } from 'formik'
 import { useMemo } from 'react'
 import { RoleSerializerRead, UserSerializerRead } from '../../../api'
 import Searchbar from '../../../components/organisms/Searchbar'
+import { setSelectedConversationId } from '../../../features/messages/messageSlice'
 import { useGetRolesQuery } from '../../../features/role/roleApi'
 import { useGetUserByFilterQuery } from '../../../features/user/userApi'
+import { useAppDispatch } from '../../../store/store'
 import AgentCard from '../components/AgentCard'
 
-export default function AgentsManagement(): JSX.Element {
+export default function AgentsManagement({
+  handleAppointment,
+  handleContact,
+}: {
+  handleAppointment: () => void
+  handleContact: () => void
+}): JSX.Element {
+  const dispatch = useAppDispatch()
+
   const { values } = useFormikContext<{ searchAgent: string }>()
 
   const currentAgency = JSON.parse(
@@ -51,7 +61,18 @@ export default function AgentsManagement(): JSX.Element {
       <div className='flex flex-col gap-4 items-center w-full h-full overflow-scroll no-scrollbar py-4'>
         {filteredAgents.map((agent: UserSerializerRead) => (
           <div key={agent.user_id} className='w-11/12'>
-            <AgentCard agent={agent} />
+            <AgentCard
+              agent={agent}
+              handleAppointment={handleAppointment}
+              handleContact={() => {
+                dispatch(
+                  setSelectedConversationId({
+                    selectedConversationId: agent.user_id as number,
+                  }),
+                )
+                handleContact()
+              }}
+            />
           </div>
         ))}
       </div>

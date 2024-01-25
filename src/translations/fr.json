@@ -239,6 +239,32 @@
     "call": "Appeler",
     "calendar": "Visiter",
     "contact": "Contacter",
+    "appointment": "Rendez-vous",
     "noAgent": "Aucun agent disponible"
+  },
+  "months": {
+    "january": "Janvier",
+    "february": "Février",
+    "march": "Mars",
+    "april": "Avril",
+    "may": "Mai",
+    "june": "Juin",
+    "july": "Juillet",
+    "august": "Août",
+    "september": "Septembre",
+    "october": "Octobre",
+    "november": "Novembre",
+    "december": "Décembre"
+  },
+  "chart": {
+    "title": "Revenus par mois"
+  },
+  "dashboard": {
+    "properties": "Nos biens",
+    "propertiesToSell": "Propriétés à vendre",
+    "propertiesToRent": "Propriétés à louer",
+    "propertiesSold": "Propriétés vendues",
+    "propertiesRented": "Propriétés louées",
+    "recentContacts": "Derniers contacts"
   }
 }

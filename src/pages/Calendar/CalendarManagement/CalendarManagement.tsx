@@ -1,10 +1,10 @@
-import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
-import { useGetAppointmentsQuery } from '../../../features/appointment/appointmentApi'
+import FullCalendar from '@fullcalendar/react'
 import {
   AppointmentSerializerRead,
   AppointmentTagSerializerRead,
 } from '../../../api'
+import { useGetAppointmentsQuery } from '../../../features/appointment/appointmentApi'
 import { useGetAppointmentTagsQuery } from '../../../features/appointmentTag/appointmentTagApi'
 
 export default function CalendarManagement() {
@@ -13,8 +13,6 @@ export default function CalendarManagement() {
   const tags = useGetAppointmentTagsQuery({}).data || []
 
   const formatDateForBackend = (date: string) => {
-    console.log(date)
-
     const DateAndTime = date.split(' ')
     const formatedDate = DateAndTime[0].split('-')
     return `${formatedDate[2].replace(',', '')}-${formatedDate[1]}-${

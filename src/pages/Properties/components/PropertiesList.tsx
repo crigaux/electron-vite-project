@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { PropertySerializerRead } from '../../../api/index.ts'
 import PropertyCard from '../../../components/organisms/PropertyCard.tsx'
 import MapComponent from './MapComponent.tsx'
@@ -27,7 +27,7 @@ export default function PropertiesList({
   return (
     <div
       className={`flex ${
-        mapOpen ? 'md:h-[calc(100vh-165px)] w-full' : ''
+        mapOpen ? 'md:h-[calc(100vh-200px)] w-full' : ''
       } justify-center transition-all duration-700 linear`}
     >
       <div

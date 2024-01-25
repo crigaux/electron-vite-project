@@ -1,0 +1,16 @@
+export default function Charts(): JSX.Element {
+  return (
+    <svg
+      width='55'
+      height='67'
+      viewBox='0 0 55 67'
+      fill='none'
+      xmlns='http://www.w3.org/2000/svg'
+    >
+      <rect y='21' width='13.75' height='46' fill='#DD6B6B' />
+      <rect x='41.25' width='13.75' height='67' fill='#F4ED34' />
+      <rect x='27.5' y='33' width='13.75' height='34' fill='#5E85BF' />
+      <rect x='13.75' y='8' width='13.75' height='59' fill='#A3CC95' />
+    </svg>
+  )
+}

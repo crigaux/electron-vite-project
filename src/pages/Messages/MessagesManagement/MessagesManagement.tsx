@@ -11,17 +11,26 @@ import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { RoleSerializerRead, UserSerializerRead } from '../../../api'
 import {
+  selectedConversationId,
+  setSelectedConversationId,
+} from '../../../features/messages/messageSlice'
+import {
   useCreateMessageMutation,
   useLazyGetMessagesQuery,
 } from '../../../features/messages/messagesApi'
 import { useGetRolesQuery } from '../../../features/role/roleApi'
 import { useGetUserByFilterQuery } from '../../../features/user/userApi'
+import { useAppDispatch, useAppSelector } from '../../../store/store'
 import { socket } from '../socket/socket'
 
 export default function MessagesManagement() {
   const currentUser = JSON.parse(
     localStorage.getItem('user') ?? '{}',
   ) as UserSerializerRead
+
+  const dispatch = useAppDispatch()
+  const selectedAgent = useAppSelector(selectedConversationId)
+
   const [triggerGetMessages] = useLazyGetMessagesQuery({})
   const [createMessage] = useCreateMessageMutation({})
 
@@ -42,7 +51,15 @@ export default function MessagesManagement() {
       .data as UserSerializerRead[]) || ([] as UserSerializerRead[])
   ).filter((agent) => agent.user_id !== currentUser.user_id)
 
-  const selectedConversation = useMemo(() => agents[active], [active])
+  const selectedConversation = useMemo(
+    () =>
+      agents.find((agent) =>
+        selectedAgent
+          ? agent?.user_id === selectedAgent
+          : agent?.user_id === active,
+      ),
+    [active, selectedAgent],
+  )
   const selectedConversationImg = useMemo(() => {
     return `https://back-rently.mathieudacheux.fr/public/img/agent/${selectedConversation?.user_id}/avatar.png`
   }, [selectedConversation])
@@ -154,7 +171,7 @@ export default function MessagesManagement() {
     <div className='w-full h-full flex flex-col-reverse'>
       <MainContainer>
         <ConversationList>
-          {agents.map((agent: UserSerializerRead, index: number) => (
+          {agents.map((agent: UserSerializerRead) => (
             <Conversation
               name={
                 <div className='flex items-center'>
@@ -162,12 +179,24 @@ export default function MessagesManagement() {
                     src={`https://back-rently.mathieudacheux.fr/public/img/agent/${agent?.user_id}/avatar.png`}
                     alt=''
                     className='w-8 h-8 rounded-full object-cover object-center mr-2'
+                    onError={({ currentTarget }) => {
+                      currentTarget.onerror = null
+                      currentTarget.src =
+                        'https://back-rently.mathieudacheux.fr/public/img/agent/none/avatar.png'
+                    }}
                   />
                   {` ${agent?.firstname ?? ''} ${agent?.name ?? ''}`}
                 </div>
               }
-              active={active === index}
-              onClick={() => setActive(index)}
+              active={active === agent.user_id}
+              onClick={() => {
+                dispatch(
+                  setSelectedConversationId({
+                    selectedConversationId: null,
+                  }),
+                )
+                setActive(agent.user_id as number)
+              }}
               key={agent.user_id}
             />
           ))}
@@ -199,15 +228,31 @@ export default function MessagesManagement() {
                       </div>
                     ) : null}
                     <div
-                      className='flex justify-center'
+                      className='flex justify-center items-center'
                       key={`${message._id} ${message.createdAt}`}
                     >
-                      {message?.user?._id !== currentUser.user_id && (
+                      {(message?.user?._id !== currentUser.user_id &&
+                        index > 0 &&
+                        new Date(message?.createdAt) >
+                          new Date(messages[index - 1]?.createdAt) &&
+                        new Date(message?.createdAt).getMinutes() !==
+                          new Date(
+                            messages[index - 1]?.createdAt,
+                          ).getMinutes()) ||
+                      (message?.user?._id !== currentUser.user_id &&
+                        index === 0) ? (
                         <img
                           alt='Profile'
-                          className='mr-3'
+                          className='w-8 h-8 rounded-full object-cover object-center mr-3'
                           src={selectedConversationImg}
+                          onError={({ currentTarget }) => {
+                            currentTarget.onerror = null
+                            currentTarget.src =
+                              'https://back-rently.mathieudacheux.fr/public/img/agent/none/avatar.png'
+                          }}
                         />
+                      ) : (
+                        <div className='w-8 h-8 mr-3' />
                       )}
                       <Message
                         model={{

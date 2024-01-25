@@ -27,10 +27,14 @@ export default function PropertyDetailsFirstStep({
   property,
   images,
   setStep,
+  selectedImage,
+  openModal,
 }: {
   property: PropertySerializerRead
   images: string[]
   setStep: (step: number) => void
+  selectedImage: number
+  openModal: () => void
 }) {
   const dispatch = useAppDispatch()
 
@@ -50,12 +54,12 @@ export default function PropertyDetailsFirstStep({
 
   return (
     <>
-      <div className='w-full h-[250px] p-1 rounded-md'>
+      <div className='w-full h-[250px] p-1 rounded-md' onClick={openModal}>
         {images ? (
           <img
-            src={`https://back-rently.mathieudacheux.fr/public/img/property/${property?.property_id}/${images[0]}`}
+            src={`https://back-rently.mathieudacheux.fr/public/img/property/${property?.property_id}/${images[selectedImage]}`}
             alt='property'
-            key={`${property.property_id}-${images[0]}`}
+            key={`${property.property_id}-${images[selectedImage]}`}
             className='property-image h-full w-full rounded-md object-center'
           />
         ) : (

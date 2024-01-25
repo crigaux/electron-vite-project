@@ -33,6 +33,21 @@ const ROUTE_API = {
   POST_CHAT: `${BASE_ROUTE_API}/messages`,
 }
 
-export { BASE_ROUTE_API, ROUTE_API }
+const MONTHS = [
+  'months.january',
+  'months.february',
+  'months.march',
+  'months.april',
+  'months.may',
+  'months.june',
+  'months.july',
+  'months.august',
+  'months.september',
+  'months.october',
+  'months.november',
+  'months.december',
+]
+
+export { BASE_ROUTE_API, MONTHS, ROUTE_API }
 
 export type TypographyColors = 'primary' | 'secondary' | 'textLight'

@@ -16,6 +16,7 @@ import bookmarkSlice from '../features/bookmark/bookmarkSlice.ts'
 import countryApi from '../features/country/countryApi.ts'
 import countrySlice from '../features/country/countrySlice.ts'
 import mailApi from '../features/mail/mailApi.ts'
+import messageSlice from '../features/messages/messageSlice.ts'
 import messageApi from '../features/messages/messagesApi.ts'
 import propertyApi from '../features/property/propertyApi.ts'
 import propertySlice from '../features/property/propertySlice.ts'
@@ -56,6 +57,7 @@ export const store = configureStore({
     [appointmentApi.reducerPath]: appointmentApi.reducer,
     [appointmentTagApi.reducerPath]: appointmentTagApi.reducer,
     [messageApi.reducerPath]: messageApi.reducer,
+    [messageSlice.name]: messageSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useMemo } from 'react'
 import { useFormik } from 'formik'
-import { useLazyGetPropertyByIdQuery } from '../../../features/property/propertyApi.ts'
+import { useCallback, useEffect, useMemo } from 'react'
 import { PropertySerializerRead } from '../../../api/index.ts'
-import { useAppSelector } from '../../../store/store.ts'
+import { useLazyGetPropertyByIdQuery } from '../../../features/property/propertyApi.ts'
 import { selectedPropertyId } from '../../../features/property/propertySlice.ts'
+import { useAppSelector } from '../../../store/store.ts'
 
 export default function usePropertyFormik() {
   // get id from URI path
@@ -20,6 +20,7 @@ export default function usePropertyFormik() {
 
   const initialValues = useMemo(() => {
     if (propertyId === -1) return {}
+
     if (propertyQuery.data) {
       return propertyQuery.data
     }

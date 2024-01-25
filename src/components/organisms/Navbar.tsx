@@ -4,11 +4,9 @@ import { APP_ROUTES } from '../../routes/routes.ts'
 import Button from '../atoms/Button.tsx'
 import CalendarDesk from '../atoms/icons/CalendarDesk.tsx'
 import Dashboard from '../atoms/icons/Dashboard.tsx'
-import Graph from '../atoms/icons/Graph.tsx'
 import Message from '../atoms/icons/Message.tsx'
 import People from '../atoms/icons/People.tsx'
 import Properties from '../atoms/icons/Properties.tsx'
-import SettingDesk from '../atoms/icons/SettingDesk.tsx'
 import NavbarTitle from '../molecules/NavbarLink.tsx'
 
 export default function Navbar({
@@ -32,7 +30,7 @@ export default function Navbar({
         width: '280px',
         backgroundColor: 'white',
       }}
-      className=''
+      className='shadow-lg z-10'
     >
       <div className='flex items-center w-full mt-5 ml-3'>
         <img src={Rently} alt='logo' className='w-1/2' />
@@ -60,20 +58,20 @@ export default function Navbar({
               icon={People({ color: tab === 3 ? 'white' : '#808191' })}
             />
           </div>
-          <div onClick={() => setTab(4)}>
+          {/* <div onClick={() => setTab(4)}>
             <NavbarTitle
               title='Clients'
               isSelected={tab === 4}
               icon={People({ color: tab === 4 ? 'white' : '#808191' })}
             />
-          </div>
-          <div onClick={() => setTab(5)}>
+          </div> */}
+          {/* <div onClick={() => setTab(5)}>
             <NavbarTitle
               title='Statistiques'
               isSelected={tab === 5}
               icon={Graph({ color: tab === 5 ? 'white' : '#808191' })}
             />
-          </div>
+          </div> */}
           <div onClick={() => setTab(6)}>
             <NavbarTitle
               title='Calendrier'
@@ -88,13 +86,13 @@ export default function Navbar({
               icon={Message({ color: tab === 7 ? 'white' : '#808191' })}
             />
           </div>
-          <div onClick={() => setTab(8)}>
+          {/* <div onClick={() => setTab(8)}>
             <NavbarTitle
               title='Paramètres'
               isSelected={tab === 8}
               icon={SettingDesk({ color: tab === 8 ? 'white' : '#808191' })}
             />
-          </div>
+          </div> */}
         </div>
         <div className='h-1/6'>
           <Button

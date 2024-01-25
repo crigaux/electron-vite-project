@@ -19,9 +19,23 @@ const attachmentApi = createApi({
         return `file/img/${id}`
       },
     }),
+    createAttachment: builder.mutation({
+      query: (args: { id: number; data: FormData }) => {
+        const { id, data } = args
+        return {
+          url: `file/img/property/${id}`,
+          method: 'POST',
+          body: data,
+        }
+      },
+    }),
   }),
 })
 
-export const { useGetAllFolderImageQuery } = attachmentApi
+export const {
+  useGetAllFolderImageQuery,
+  useLazyGetAllFolderImageQuery,
+  useCreateAttachmentMutation,
+} = attachmentApi
 
 export default attachmentApi
