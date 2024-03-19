@@ -8,9 +8,9 @@ export default function TopNavbar() {
   return (
     <div className='flex justify-end items-center min-h-[65px] pr-5 shadow-lg z-20'>
       <img
-        src={`https://back-rently.mathieudacheux.fr/public/img/agent/${currentUser?.user_id}/avatar.png`}
+        src={`https://back-rently.mathieudacheux.fr/public/img/agent/${currentUser?.user_id}/resized-avatar.png`}
         alt=''
-        className='w-8 h-8 rounded-full object-cover object-center mr-2'
+        className='w-8 h-8 rounded-full object-cover mr-2'
         onError={({ currentTarget }) => {
           currentTarget.onerror = null
           currentTarget.src =

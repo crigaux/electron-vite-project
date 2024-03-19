@@ -9,10 +9,19 @@ import Dashboard from '../../Dashboard/Dashboard'
 import Messages from '../../Messages/Messages'
 import Properties from '../../Properties/Properties'
 import PropertyDetails from '../../PropertyDetails/PropertyDetails'
+import Users from '../../Users/Users'
+import {
+  selectedAgentId,
+  selectedUserId,
+} from '../../../features/user/userSlice'
+import UserDetails from '../../UserDetails/UserDetails'
+import AgentDetails from '../../AgentDetails/AgentDetails'
 
 export default function HomeManagement() {
   const [tab, setTab] = useState(1)
   const selectedProperty = useAppSelector(selectedPropertyId)
+  const selectedUser = useAppSelector(selectedUserId)
+  const selectedAgent = useAppSelector(selectedAgentId)
 
   const handleAppointment = () => {
     setTab(6)
@@ -32,7 +41,7 @@ export default function HomeManagement() {
       <div className='flex flex-col'>
         <TopNavbar />
 
-        <div className='w-[calc(100vw-280px)] min-h-[calc(100%-65px)] flex justify-center overflow-hidden'>
+        <div className='w-[calc(100vw-280px)] min-h-[calc(100%-65px)] flex justify-center'>
           {tab === 1 && (
             <div className='w-full flex justify-center'>
               <Dashboard
@@ -43,14 +52,25 @@ export default function HomeManagement() {
           )}
           {tab === 2 &&
             (selectedProperty ? <PropertyDetails /> : <Properties />)}
-          {tab === 3 && (
-            <Agents
-              handleAppointment={handleAppointment}
-              handleContact={handleContact}
-            />
-          )}
-          {/* {tab === 4 && <div>Users</div>}
-        {tab === 5 && <div>Profil</div>} */}
+          {tab === 3 &&
+            (selectedAgent ? (
+              <AgentDetails />
+            ) : (
+              <Agents
+                handleAppointment={handleAppointment}
+                handleContact={handleContact}
+              />
+            ))}
+          {tab === 4 &&
+            (selectedUser ? (
+              <UserDetails />
+            ) : (
+              <Users
+                handleAppointment={handleAppointment}
+                handleContact={handleContact}
+              />
+            ))}
+          {/* {tab === 5 && <div>Profil</div>} */}
           {tab === 6 && <Calendar />}
           {tab === 7 && <Messages />}
           {/* {tab === 8 && <div>Profil</div>} */}

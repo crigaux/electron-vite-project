@@ -8,6 +8,12 @@ import Message from '../atoms/icons/Message.tsx'
 import People from '../atoms/icons/People.tsx'
 import Properties from '../atoms/icons/Properties.tsx'
 import NavbarTitle from '../molecules/NavbarLink.tsx'
+import { useAppDispatch } from '../../store/store.ts'
+import { setSelectedPropertyId } from '../../features/property/propertySlice.ts'
+import {
+  setSelectedAgentId,
+  setSelectedUserId,
+} from '../../features/user/userSlice.ts'
 
 export default function Navbar({
   tab,
@@ -18,9 +24,17 @@ export default function Navbar({
 }): JSX.Element {
   const navigate = useNavigate()
 
+  const dispatch = useAppDispatch()
+
   const disconnectAndNavigate = () => {
     localStorage.removeItem('token')
     navigate(APP_ROUTES.LOGIN)
+  }
+
+  const resetSlices = () => {
+    dispatch(setSelectedPropertyId({ selectedPropertyId: null }))
+    dispatch(setSelectedUserId({ selectedUserId: null }))
+    dispatch(setSelectedAgentId({ selectedAgentId: null }))
   }
 
   return (
@@ -37,49 +51,72 @@ export default function Navbar({
       </div>
       <div className='flex flex-col px-3 mt-6 h-5/6 justify-between'>
         <div className='flex flex-col gap-2 h-8/12'>
-          <div onClick={() => setTab(1)}>
+          <div
+            onClick={() => {
+              setTab(1)
+              resetSlices()
+            }}
+          >
             <NavbarTitle
               title='Tableau de bord'
               isSelected={tab === 1}
               icon={Dashboard({ color: tab === 1 ? 'white' : '#808191' })}
             />
           </div>
-          <div onClick={() => setTab(2)}>
+          <div
+            onClick={() => {
+              setTab(2)
+              resetSlices()
+            }}
+          >
             <NavbarTitle
               title='Propriétés'
               isSelected={tab === 2}
               icon={Properties({ color: tab === 2 ? 'white' : '#808191' })}
             />
           </div>
-          <div onClick={() => setTab(3)}>
+          <div
+            onClick={() => {
+              setTab(3)
+              resetSlices()
+            }}
+          >
             <NavbarTitle
               title='Agents'
               isSelected={tab === 3}
               icon={People({ color: tab === 3 ? 'white' : '#808191' })}
             />
           </div>
-          {/* <div onClick={() => setTab(4)}>
+          <div
+            onClick={() => {
+              setTab(4)
+              resetSlices()
+            }}
+          >
             <NavbarTitle
               title='Clients'
               isSelected={tab === 4}
               icon={People({ color: tab === 4 ? 'white' : '#808191' })}
             />
-          </div> */}
-          {/* <div onClick={() => setTab(5)}>
-            <NavbarTitle
-              title='Statistiques'
-              isSelected={tab === 5}
-              icon={Graph({ color: tab === 5 ? 'white' : '#808191' })}
-            />
-          </div> */}
-          <div onClick={() => setTab(6)}>
+          </div>
+          <div
+            onClick={() => {
+              setTab(6)
+              resetSlices()
+            }}
+          >
             <NavbarTitle
               title='Calendrier'
               isSelected={tab === 6}
               icon={CalendarDesk({ color: tab === 6 ? 'white' : '#808191' })}
             />
           </div>
-          <div onClick={() => setTab(7)}>
+          <div
+            onClick={() => {
+              setTab(7)
+              resetSlices()
+            }}
+          >
             <NavbarTitle
               title='Messages'
               isSelected={tab === 7}

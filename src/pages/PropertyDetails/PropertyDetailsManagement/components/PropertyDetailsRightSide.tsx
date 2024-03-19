@@ -48,7 +48,7 @@ export default function PropertyDetailsRightSide({
               `https://back-rently.mathieudacheux.fr/public/img/agent/none/avatar.png`
             }
             alt=''
-            className='object-cover rounded-full w-full h-full object-center'
+            className='object-cover rounded-full w-full h-full'
           />
         </div>
         <div className='w-full text-center text-neutral-900'>

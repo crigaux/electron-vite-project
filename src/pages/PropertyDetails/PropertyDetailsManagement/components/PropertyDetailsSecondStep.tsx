@@ -1,5 +1,6 @@
 import { useFormikContext } from 'formik'
 import { PropertySerializerRead } from '../../../../api'
+import { toast } from 'sonner'
 import Button from '../../../../components/atoms/Button'
 import Typography from '../../../../components/atoms/Typography'
 import FormikTextArea from '../../../../components/molecules/core/FormikTextArea'
@@ -18,13 +19,13 @@ export default function PropertyDetailsSecondStep({
   setStep,
   selectedImage,
   openModal,
-}: {
+}: Readonly<{
   property: PropertySerializerRead
   images: string[]
   setStep: (step: number) => void
   selectedImage: number
   openModal: () => void
-}) {
+}>) {
   const { values } = useFormikContext<PropertySerializerRead>()
   const dispatch = useAppDispatch()
 
@@ -37,7 +38,7 @@ export default function PropertyDetailsSecondStep({
   ).agency_id
 
   const patchProperty = async ({ draft }: { draft: boolean }) => {
-    const response = await updateProperty({
+    const response = (await updateProperty({
       id: property.property_id,
       name: values.name,
       description: values.description,
@@ -70,9 +71,12 @@ export default function PropertyDetailsSecondStep({
       dpe: values.dpe,
       year_construction: values.year_construction,
       draft,
-    }).unwrap()
+    })) as any
 
-    if (response.error) return false
+    if (response.error) {
+      toast.error(response.error.data.message)
+      return false
+    }
 
     return true
   }
@@ -100,7 +104,7 @@ export default function PropertyDetailsSecondStep({
 
     if (!addressResponse) return false
 
-    const response = await createProperty({
+    const response = (await createProperty({
       name: values.name,
       description: values.description,
       price: Number(values.price),
@@ -110,23 +114,23 @@ export default function PropertyDetailsSecondStep({
       kitchen: Number(values.kitchen),
       toilet: Number(values.toilet),
       bedroom: Number(values.bedroom),
-      elevator: values.elevator || false,
-      balcony: values.balcony || false,
-      terrace: values.terrace || false,
-      cellar: values.cellar || false,
-      parking: values.parking || false,
+      elevator: values.elevator ?? false,
+      balcony: values.balcony ?? false,
+      terrace: values.terrace ?? false,
+      cellar: values.cellar ?? false,
+      parking: values.parking ?? false,
       number_room: Number(values.number_room),
-      pool: values.pool || false,
-      caretaker: values.caretaker || false,
-      fiber_deployed: values.fiber_deployed || false,
-      duplex: values.duplex || false,
-      top_floor: values.top_floor || false,
-      garage: values.garage || false,
-      work_done: values.work_done || false,
-      life_annuity: values.life_annuity || false,
-      ground_floor: values.ground_floor || false,
-      land_size_1: values.land_size_1 || 0,
-      garden: values.garden || false,
+      pool: values.pool ?? false,
+      caretaker: values.caretaker ?? false,
+      fiber_deployed: values.fiber_deployed ?? false,
+      duplex: values.duplex ?? false,
+      top_floor: values.top_floor ?? false,
+      garage: values.garage ?? false,
+      work_done: values.work_done ?? false,
+      life_annuity: values.life_annuity ?? false,
+      ground_floor: values.ground_floor ?? false,
+      land_size_1: values.land_size_1 ?? 0,
+      garden: values.garden ?? false,
       updated_at: new Date(),
       dpe: Number(values.dpe),
       year_construction: values.year_construction,
@@ -136,27 +140,31 @@ export default function PropertyDetailsSecondStep({
       status_id: values.status_id,
       agency_id: currentAgency,
       draft,
-    }).unwrap()
+    })) as any
 
-    if (response.error) return false
+    if (response.error) {
+      toast.error(response.error.data.message)
+      return false
+    }
 
     return true
   }
   return (
     <>
       <div className='w-full h-[250px] p-1 rounded-md' onClick={openModal}>
-        {images ? (
+        {
           <img
             src={`https://back-rently.mathieudacheux.fr/public/img/property/${property?.property_id}/${images[selectedImage]}`}
             alt='property'
             key={`${property.property_id}-${images[selectedImage]}`}
             className='property-image h-full w-full rounded-md object-center'
+            onError={({ currentTarget }) => {
+              currentTarget.onerror = null
+              currentTarget.src =
+                'https://back-rently.mathieudacheux.fr/public/img/property/placeholder.png'
+            }}
           />
-        ) : (
-          <div className='w-full h-full flex justify-center items-center rounded-md bg-neutral-300'>
-            <Typography variant='h1'>Pas d'image</Typography>
-          </div>
-        )}
+        }
       </div>
       <div className='w-11/12'>
         <div className=' flex flex-col items-start my-4'>

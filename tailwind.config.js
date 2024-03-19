@@ -97,6 +97,11 @@ module.exports = {
             cursor: 'pointer',
           },
 
+          '.agent-image': {
+            'object-fit': 'cover',
+            cursor: 'pointer',
+          },
+
           '.modal .modal-box': {
             width: '60%',
             height: '60%',

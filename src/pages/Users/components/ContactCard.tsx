@@ -13,11 +13,11 @@ export default function ContactCard({
       onClick={handleContact}
     >
       <img
-        src={`https://back-rently.mathieudacheux.fr/public/img/agent/${contact.user_id}/resized-avatar.png`}
+        src={`https://back-rently.mathieudacheux.fr/public/img/user/${contact.user_id}/resized-avatar.png`}
         onError={({ currentTarget }) => {
           currentTarget.onerror = null
           currentTarget.src =
-            'https://back-rently.mathieudacheux.fr/public/img/agent/none/avatar.png'
+            'https://back-rently.mathieudacheux.fr/public/img/user/none/avatar.png'
         }}
         alt=''
         className='w-[65px] h-[65px] rounded-lg object-contain mr-4'

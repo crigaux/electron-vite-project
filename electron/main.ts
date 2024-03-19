@@ -12,16 +12,22 @@ const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL']
 
 function createWindow() {
   win = new BrowserWindow({
-    icon: path.join(process.env.VITE_PUBLIC, 'electron-vite.svg'),
+    icon: path.join(__dirname, '/favicon.ico'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
     titleBarStyle: 'hidden',
+    trafficLightPosition: { x: 10, y: 10 },
     titleBarOverlay: {
       color: '#4A43EC',
       symbolColor: 'white',
       height: 30,
     },
+    closable: true,
+    minHeight: 600,
+    minWidth: 1100,
+    width: 1450,
+    height: 800,
   })
 
   // Test active push message to Renderer-process.

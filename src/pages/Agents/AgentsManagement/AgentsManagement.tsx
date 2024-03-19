@@ -1,12 +1,20 @@
 import { useFormikContext } from 'formik'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { RoleSerializerRead, UserSerializerRead } from '../../../api'
 import Searchbar from '../../../components/organisms/Searchbar'
 import { setSelectedConversationId } from '../../../features/messages/messageSlice'
 import { useGetRolesQuery } from '../../../features/role/roleApi'
-import { useGetUserByFilterQuery } from '../../../features/user/userApi'
-import { useAppDispatch } from '../../../store/store'
+import {
+  useGetUserByFilterQuery,
+  useLazyGetUserByFilterQuery,
+} from '../../../features/user/userApi'
+import { useAppDispatch, useAppSelector } from '../../../store/store'
 import AgentCard from '../components/AgentCard'
+import Button from '../../../components/atoms/Button'
+import {
+  selectedUserId,
+  setSelectedAgentId,
+} from '../../../features/user/userSlice'
 
 export default function AgentsManagement({
   handleAppointment,
@@ -17,7 +25,14 @@ export default function AgentsManagement({
 }): JSX.Element {
   const dispatch = useAppDispatch()
 
+  const userId = useAppSelector(selectedUserId) as number
+
   const { values } = useFormikContext<{ searchAgent: string }>()
+
+  const [users, setUsers] = useState<UserSerializerRead[]>([])
+
+  const [triggerGetUsersQuery, getUsersQueryResults] =
+    useLazyGetUserByFilterQuery()
 
   const currentAgency = JSON.parse(
     localStorage.getItem('user') as string,
@@ -28,21 +43,27 @@ export default function AgentsManagement({
     (role: RoleSerializerRead) => role.name === 'AGENT',
   )?.role_id
 
-  const agents =
-    useGetUserByFilterQuery({ role: agentRole, agency_id: currentAgency })
-      .data || []
+  useEffect(() => {
+    triggerGetUsersQuery({ role: agentRole, agency_id: currentAgency })
+  }, [agentRole, currentAgency, userId])
+
+  useEffect(() => {
+    if (getUsersQueryResults.data) {
+      setUsers(getUsersQueryResults.data)
+    }
+  }, [getUsersQueryResults.data])
 
   const filteredAgents = useMemo(() => {
-    if (values.searchAgent?.length < 3) return agents
+    if (values.searchAgent?.length < 3) return users
 
-    return agents.filter((agent: UserSerializerRead) => {
+    return users.filter((agent: UserSerializerRead) => {
       const fullName = `${agent?.name} ${agent?.firstname}`
       return fullName.toLowerCase().includes(values.searchAgent.toLowerCase())
     })
-  }, [values.searchAgent, agents])
+  }, [values.searchAgent, users])
 
   const handleSearch = ({ search }: { search: string }) => {
-    return agents.filter((agent: UserSerializerRead) => {
+    return users.filter((agent: UserSerializerRead) => {
       const fullName = `${agent?.name} ${agent?.firstname}`
       return fullName.toLowerCase().includes(search.toLowerCase())
     })
@@ -55,6 +76,13 @@ export default function AgentsManagement({
           <Searchbar
             name='searchAgent'
             onClick={() => handleSearch({ search: values.searchAgent })}
+          />
+          <Button
+            text='Ajouter'
+            className='ml-5'
+            onClick={() =>
+              dispatch(setSelectedAgentId({ selectedAgentId: -1 }))
+            }
           />
         </div>
       </div>

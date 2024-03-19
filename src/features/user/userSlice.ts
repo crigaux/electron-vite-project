@@ -22,6 +22,17 @@ export const setSelectedUserId = createAsyncThunk(
   },
 )
 
+export const setSelectedAgentId = createAsyncThunk(
+  'user/setSelectedAgentId',
+  (args: { selectedAgentId: number | null }) => {
+    const { selectedAgentId } = args
+
+    return {
+      selectedAgentId,
+    }
+  },
+)
+
 export const setSelectedUser = createAsyncThunk(
   'user/setSelectedUser',
   (args: { selectedUser: any }) => {
@@ -41,6 +52,9 @@ const userSlice = createSlice({
     builder.addCase(setSelectedUserId.fulfilled, (state, action) => {
       state.id = action.payload.selectedUserId
     })
+    builder.addCase(setSelectedAgentId.fulfilled, (state, action) => {
+      state.id = action.payload.selectedAgentId
+    })
     builder.addCase(setSelectedUser.fulfilled, (state, action) => {
       state.fullUser = action.payload.selectedUser
     })
@@ -48,6 +62,8 @@ const userSlice = createSlice({
 })
 
 export const selectedUserId = (state: RootState) => state.user.id
+
+export const selectedAgentId = (state: RootState) => state.user.id
 
 export const selectedUser = (state: RootState) => state.user.fullUser
 

@@ -41,14 +41,16 @@ export default function PropertiesManagementStep() {
 
     return properties.filter(
       (property) =>
-        property?.name?.toLowerCase()?.includes(values.search?.toLowerCase()),
+        property?.name?.toLowerCase()?.includes(values.search?.toLowerCase()) ||
+        property?.price?.toString()?.includes(values.search?.toLowerCase()),
     )
   }, [values.search, properties])
 
   const handleSearch = ({ search }: { search: string }) => {
     return properties.filter(
       (property) =>
-        property?.name?.toLowerCase()?.includes(search.toLowerCase()),
+        property?.name?.toLowerCase()?.includes(search.toLowerCase()) ||
+        property?.price?.toString()?.includes(search.toLowerCase()),
     )
   }
 

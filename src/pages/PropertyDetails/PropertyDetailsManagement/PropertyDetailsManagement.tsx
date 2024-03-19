@@ -99,8 +99,13 @@ export default function PropertyDetailsDetailsManagement({
               }
               alt=''
               className='w-full h-full object-cover'
+              onError={({ currentTarget }) => {
+                currentTarget.onerror = null
+                currentTarget.src =
+                  'https://back-rently.mathieudacheux.fr/public/img/property/placeholder.png'
+              }}
             />
-            <button className='fixed right-5 top-5 w-[35px] h-[35px] bg-white rounded-md text-primary font-extrabold'>
+            <button className='fixed right-5 top-5 w-[35px] h-[35px] bg-white rounded-md text-primary font-extrabold' onClick={() => {}}>
               ✕
             </button>
             <div

@@ -15,11 +15,6 @@ export default function PropertyDetailsDesktopImages({
         <div className='w-1/2 h-full p-1 rounded-md'>
           <img
             src={`https://back-rently.mathieudacheux.fr/public/img/property/${property?.property_id}/${images[0]}`}
-            onError={({ currentTarget }) => {
-              currentTarget.onerror = null
-              currentTarget.src =
-                'https://back-rently.mathieudacheux.fr/public/img/property/placeholder.png'
-            }}
             alt='property'
             key={`${property.property_id}-${images[0]}`}
             className='property-image h-full w-full rounded-md'
@@ -34,11 +29,6 @@ export default function PropertyDetailsDesktopImages({
               <img
                 src={`https://back-rently.mathieudacheux.fr/public/img/property/${property?.property_id}/${images[1]}`}
                 alt='property'
-                onError={({ currentTarget }) => {
-                  currentTarget.onerror = null
-                  currentTarget.src =
-                    'https://back-rently.mathieudacheux.fr/public/img/property/placeholder.png'
-                }}
                 key={`${property.property_id}-${images[1]}`}
                 className='property-image h-full w-full rounded-md'
                 onClick={() => {
@@ -50,11 +40,6 @@ export default function PropertyDetailsDesktopImages({
               <img
                 src={`https://back-rently.mathieudacheux.fr/public/img/property/${property?.property_id}/${images[2]}`}
                 alt='property'
-                onError={({ currentTarget }) => {
-                  currentTarget.onerror = null
-                  currentTarget.src =
-                    'https://back-rently.mathieudacheux.fr/public/img/property/placeholder.png'
-                }}
                 key={`${property.property_id}-${images[2]}`}
                 className='property-image h-full w-full rounded-md'
                 onClick={() => {
@@ -67,11 +52,6 @@ export default function PropertyDetailsDesktopImages({
             <img
               src={`https://back-rently.mathieudacheux.fr/public/img/property/${property?.property_id}/${images[3]}`}
               alt='property'
-              onError={({ currentTarget }) => {
-                currentTarget.onerror = null
-                currentTarget.src =
-                  'https://back-rently.mathieudacheux.fr/public/img/property/placeholder.png'
-              }}
               key={`${property.property_id}-${images[3]}`}
               className='property-image h-full w-full rounded-md'
               onClick={() => {

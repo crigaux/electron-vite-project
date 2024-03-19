@@ -61,7 +61,7 @@ export default function MessagesManagement() {
     [active, selectedAgent],
   )
   const selectedConversationImg = useMemo(() => {
-    return `https://back-rently.mathieudacheux.fr/public/img/agent/${selectedConversation?.user_id}/avatar.png`
+    return `https://back-rently.mathieudacheux.fr/public/img/agent/${selectedConversation?.user_id}/resized-avatar.png`
   }, [selectedConversation])
 
   useEffect(() => {
@@ -176,9 +176,9 @@ export default function MessagesManagement() {
               name={
                 <div className='flex items-center'>
                   <img
-                    src={`https://back-rently.mathieudacheux.fr/public/img/agent/${agent?.user_id}/avatar.png`}
+                    src={`https://back-rently.mathieudacheux.fr/public/img/agent/${agent?.user_id}/resized-avatar.png`}
                     alt=''
-                    className='w-8 h-8 rounded-full object-cover object-center mr-2'
+                    className='w-8 h-8 rounded-full object-cover mr-2'
                     onError={({ currentTarget }) => {
                       currentTarget.onerror = null
                       currentTarget.src =
@@ -243,7 +243,7 @@ export default function MessagesManagement() {
                         index === 0) ? (
                         <img
                           alt='Profile'
-                          className='w-8 h-8 rounded-full object-cover object-center mr-3'
+                          className='w-8 h-8 rounded-full object-cover mr-3'
                           src={selectedConversationImg}
                           onError={({ currentTarget }) => {
                             currentTarget.onerror = null

@@ -26,15 +26,17 @@ export default function PropertyCard({
 
   const dispatch = useAppDispatch()
 
-  const images = useGetAllFolderImageQuery({
-    id: property?.property_id ? Number(property?.property_id) : 0,
-  }).data
+  const images =
+    useGetAllFolderImageQuery({
+      id: property?.property_id ? Number(property?.property_id) : 0,
+    }).data ?? []
 
   const statuses = useGetStatusQuery({}).data || []
 
   return (
     <div
       id={String(property?.property_id)}
+      key={String(property?.property_id)}
       className={`card ${
         !mapOpened ? 'w-[350px] min-w-[250px]' : 'flex-row w-full min-h-[220px]'
       } hover:cursor-pointer relative`}
@@ -69,10 +71,15 @@ export default function PropertyCard({
       <figure className={!mapOpened ? 'w-12/12' : 'w-5/12'}>
         <img
           src={
-            images?.length
+            images?.length > 0
               ? `https://back-rently.mathieudacheux.fr/public/img/property/${property?.property_id}/${images[0]}`
               : ''
           }
+          onError={({ currentTarget }) => {
+            currentTarget.onerror = null
+            currentTarget.src =
+              'https://back-rently.mathieudacheux.fr/public/img/property/placeholder.png'
+          }}
           alt='Album'
           className='h-full w-full object-cover'
         />

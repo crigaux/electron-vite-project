@@ -1,14 +1,14 @@
 const APP_ROUTES = {
-  // Home
-  HOME: '/',
-
   // Auth
-  LOGIN: '/login',
+  LOGIN: '/',
   REGISTER: '/register',
   FORGOT_PASSWORD: '/forgot-password',
   RESET_PASSWORD: '/reset-password',
   ACCOUNT: '/account',
   VALIDATE_ACCOUNT: '/validate-account',
+
+  // Home
+  HOME: '/home',
 
   // Navbar & Footer
   BUY: '/buy',
@@ -40,12 +40,12 @@ const APP_ROUTES = {
 
 const APP_TITLES = [
   {
-    path: APP_ROUTES.HOME,
-    title: 'title.home',
-  },
-  {
     path: APP_ROUTES.LOGIN,
     title: 'title.login',
+  },
+  {
+    path: APP_ROUTES.HOME,
+    title: 'title.home',
   },
   {
     path: APP_ROUTES.REGISTER,

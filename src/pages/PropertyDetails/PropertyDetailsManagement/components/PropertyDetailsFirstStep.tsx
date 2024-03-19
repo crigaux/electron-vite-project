@@ -55,18 +55,19 @@ export default function PropertyDetailsFirstStep({
   return (
     <>
       <div className='w-full h-[250px] p-1 rounded-md' onClick={openModal}>
-        {images ? (
+        {
           <img
             src={`https://back-rently.mathieudacheux.fr/public/img/property/${property?.property_id}/${images[selectedImage]}`}
             alt='property'
             key={`${property.property_id}-${images[selectedImage]}`}
             className='property-image h-full w-full rounded-md object-center'
+            onError={({ currentTarget }) => {
+              currentTarget.onerror = null
+              currentTarget.src =
+                'https://back-rently.mathieudacheux.fr/public/img/property/placeholder.png'
+            }}
           />
-        ) : (
-          <div className='w-full h-full flex justify-center items-center rounded-md bg-neutral-300'>
-            <Typography variant='h1'>Pas d'image</Typography>
-          </div>
-        )}
+        }
       </div>
       <div className='w-11/12 flex flex-col items-start my-4'>
         <Typography variant='h1' className='text-center'>
