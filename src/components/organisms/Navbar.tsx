@@ -82,9 +82,9 @@ export default function Navbar({
             }}
           >
             <NavbarTitle
-              title='Agents'
+              title='Créer vente/location'
               isSelected={tab === 3}
-              icon={People({ color: tab === 3 ? 'white' : '#808191' })}
+              icon={Properties({ color: tab === 3 ? 'white' : '#808191' })}
             />
           </div>
           <div
@@ -94,9 +94,21 @@ export default function Navbar({
             }}
           >
             <NavbarTitle
-              title='Clients'
+              title='Agents'
               isSelected={tab === 4}
               icon={People({ color: tab === 4 ? 'white' : '#808191' })}
+            />
+          </div>
+          <div
+            onClick={() => {
+              setTab(5)
+              resetSlices()
+            }}
+          >
+            <NavbarTitle
+              title='Clients'
+              isSelected={tab === 5}
+              icon={People({ color: tab === 5 ? 'white' : '#808191' })}
             />
           </div>
           <div

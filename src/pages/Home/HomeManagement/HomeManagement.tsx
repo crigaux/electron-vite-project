@@ -16,6 +16,7 @@ import {
 } from '../../../features/user/userSlice'
 import UserDetails from '../../UserDetails/UserDetails'
 import AgentDetails from '../../AgentDetails/AgentDetails'
+import AddSaleOrLocation from '../../AddSaleOrLocation/AddSaleOrLocation'
 
 export default function HomeManagement() {
   const [tab, setTab] = useState(1)
@@ -35,11 +36,15 @@ export default function HomeManagement() {
     setTab(2)
   }
 
+  const handleAgentClick = () => {
+    setTab(4)
+  }
+
   return (
     <div className='flex h-[calc(100vh-30px)] overflow-hidden'>
       <Navbar setTab={setTab} tab={tab} />
       <div className='flex flex-col'>
-        <TopNavbar />
+        <TopNavbar handleAgentClick={handleAgentClick} />
 
         <div className='w-[calc(100vw-280px)] min-h-[calc(100%-65px)] flex justify-center'>
           {tab === 1 && (
@@ -52,7 +57,10 @@ export default function HomeManagement() {
           )}
           {tab === 2 &&
             (selectedProperty ? <PropertyDetails /> : <Properties />)}
-          {tab === 3 &&
+          {tab === 3 && (
+            <AddSaleOrLocation navigateToProperties={handlePropertyClick} />
+          )}
+          {tab === 4 &&
             (selectedAgent ? (
               <AgentDetails />
             ) : (
@@ -61,7 +69,7 @@ export default function HomeManagement() {
                 handleContact={handleContact}
               />
             ))}
-          {tab === 4 &&
+          {tab === 5 &&
             (selectedUser ? (
               <UserDetails />
             ) : (

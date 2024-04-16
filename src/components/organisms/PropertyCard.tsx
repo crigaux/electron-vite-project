@@ -81,7 +81,7 @@ export default function PropertyCard({
               'https://back-rently.mathieudacheux.fr/public/img/property/placeholder.png'
           }}
           alt='Album'
-          className='h-full w-full object-cover'
+          className='h-full w-full object-cover rounded-xl'
         />
       </figure>
       <div

@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from 'react'
+import { useGetAgencyByIdQuery } from '../features/agency/agencyApi'
 
 export interface UserLocationContextType {
   userLocation: number[]
@@ -14,6 +15,11 @@ function UserLocationProvider({
 }: {
   children: React.ReactNode
 }): JSX.Element {
+  const currentAgency = JSON.parse(localStorage.getItem('user') as string)
+    ?.agency_id
+
+  const agencyQuery = useGetAgencyByIdQuery(currentAgency)
+
   const [userLocation, setUserLocation] = useState<number[]>([
     48.866667, 2.333333,
   ])
@@ -23,13 +29,12 @@ function UserLocationProvider({
   }
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition((position) => {
+    if (agencyQuery?.data?.latitude && agencyQuery?.data?.longitude)
       setUserLocationToDefault([
-        position.coords.latitude,
-        position.coords.longitude,
+        parseFloat(agencyQuery?.data?.longitude),
+        parseFloat(agencyQuery?.data?.latitude),
       ])
-    })
-  }, [navigator.geolocation])
+  }, [agencyQuery?.data?.latitude, agencyQuery?.data?.longitude])
 
   return (
     <UserLocationContext.Provider value={{ userLocation, setUserLocation }}>

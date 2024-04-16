@@ -1,43 +1,39 @@
-import { useEffect, useState } from 'react'
+import { useFormikContext } from 'formik'
+import Button from '../../../components/atoms/Button'
+import FormikCheckbox from '../../../components/molecules/core/FormikCheckbox'
+import FormikSelect from '../../../components/molecules/core/FormikSelect'
+import FormikTextField from '../../../components/molecules/core/FormikTextField'
 import {
-  PropertySerializerRead,
   PropertyTypeSerializerRead,
   RoleSerializerRead,
   StatusSerializerRead,
   UserSerializerRead,
-} from '../../../../api'
-import Button from '../../../../components/atoms/Button'
-import Typography from '../../../../components/atoms/Typography'
-import FormikCheckbox from '../../../../components/molecules/core/FormikCheckbox'
-import FormikSelect from '../../../../components/molecules/core/FormikSelect'
-import FormikTextField from '../../../../components/molecules/core/FormikTextField'
-import { setSelectedPropertyId } from '../../../../features/property/propertySlice'
-import { useGetPropertyTypesQuery } from '../../../../features/propertyType/propertyTypeApi'
-import { useGetRolesQuery } from '../../../../features/role/roleApi'
-import { useGetStatusQuery } from '../../../../features/status/statusApi'
-import { useLazyGetUserByFilterQuery } from '../../../../features/user/userApi'
-import { useAppDispatch } from '../../../../store/store'
+} from '../../../api'
 import {
   dpeList,
   numberList,
   surfaceList,
   yearList,
-} from '../../../Properties/constants/constants'
+} from '../../Properties/constants/constants'
+import Typography from '../../../components/atoms/Typography'
+import { useGetRolesQuery } from '../../../features/role/roleApi'
+import { useGetPropertyTypesQuery } from '../../../features/propertyType/propertyTypeApi'
+import { useLazyGetUserByFilterQuery } from '../../../features/user/userApi'
+import { useGetStatusQuery } from '../../../features/status/statusApi'
+import { useAppDispatch } from '../../../store/store'
+import { setSelectedPropertyId } from '../../../features/property/propertySlice'
+import { AddSaleOrLocationFormikType } from '../type'
+import { useEffect, useState } from 'react'
 
-export default function PropertyDetailsFirstStep({
-  property,
-  images,
+export default function AddSaleOrLocationFirstStep({
   setStep,
-  selectedImage,
-  openModal,
 }: {
-  property: PropertySerializerRead
-  images: string[]
   setStep: (step: number) => void
-  selectedImage: number
-  openModal: () => void
 }) {
   const dispatch = useAppDispatch()
+
+  const { values, setFieldValue } =
+    useFormikContext<AddSaleOrLocationFormikType>()
 
   const currentAgency = JSON.parse(
     localStorage.getItem('user') as string,
@@ -45,7 +41,6 @@ export default function PropertyDetailsFirstStep({
 
   const roles = useGetRolesQuery({}).data || []
   const property_types = useGetPropertyTypesQuery({}).data || []
-
   const [users, setUsers] = useState<UserSerializerRead[]>([])
 
   const [triggerGetUsersQuery, getUsersQueryResult] =
@@ -57,33 +52,17 @@ export default function PropertyDetailsFirstStep({
       role: roles.find((role: RoleSerializerRead) => role.name === 'USER')
         ?.role_id,
     })
-  }, [property])
+  }, [values?.selected_property])
 
   useEffect(() => {
     if (getUsersQueryResult.data) {
       setUsers(getUsersQueryResult.data)
     }
   }, [getUsersQueryResult.data])
-
   const statuses = useGetStatusQuery({}).data || []
 
   return (
-    <>
-      <div className='w-full h-[250px] p-1 rounded-md' onClick={openModal}>
-        {
-          <img
-            src={`https://back-rently.mathieudacheux.fr/public/img/property/${property?.property_id}/${images[selectedImage]}`}
-            alt='property'
-            key={`${property.property_id}-${images[selectedImage]}`}
-            className='property-image h-full w-full rounded-md object-center'
-            onError={({ currentTarget }) => {
-              currentTarget.onerror = null
-              currentTarget.src =
-                'https://back-rently.mathieudacheux.fr/public/img/property/placeholder.png'
-            }}
-          />
-        }
-      </div>
+    <div className='w-full flex flex-col items-center mt-6'>
       <div className='w-11/12 flex flex-col items-start my-4'>
         <Typography variant='h1' className='text-center'>
           Caractéristiques du bien
@@ -91,7 +70,7 @@ export default function PropertyDetailsFirstStep({
         <div className='w-full flex justify-between'>
           <div className='mt-4 w-[74%]'>
             <FormikTextField
-              name='name'
+              name='selected_property.name'
               label='Titre du bien'
               placeholder='Manoir du lac...'
             />
@@ -102,7 +81,7 @@ export default function PropertyDetailsFirstStep({
                 label: `${user.firstname} ${user.name}`,
                 value: user.user_id as number,
               }))}
-              name='owner_id'
+              name='selected_property.owner_id'
               label='Propriétaire'
               placeholder='Jacques Dupont'
             />
@@ -118,7 +97,7 @@ export default function PropertyDetailsFirstStep({
                     value: property_type.property_type_id,
                   }),
                 )}
-                name='property_type'
+                name='selected_property.property_type'
                 label='Type de logement'
                 placeholder='Appartement, Maison...'
               />
@@ -126,17 +105,21 @@ export default function PropertyDetailsFirstStep({
             <div className='w-[22%]'>
               <FormikSelect
                 options={numberList}
-                name='number_room'
+                name='selected_property.number_room'
                 label='Nombre de pièces'
                 placeholder='1, 2, 3...'
               />
             </div>
             <div className='w-[22%]'>
-              <FormikTextField name='price' label='Prix' placeholder='250000' />
+              <FormikTextField
+                name='selected_property.price'
+                label='Prix'
+                placeholder='250000'
+              />
             </div>
             <div className='w-[22%]'>
               <FormikTextField
-                name='surface'
+                name='selected_property.surface'
                 label='Surface'
                 placeholder='30m²'
               />
@@ -146,7 +129,7 @@ export default function PropertyDetailsFirstStep({
             <div className='w-[22%]'>
               <FormikSelect
                 options={numberList}
-                name='bedroom'
+                name='selected_property.bedroom'
                 label='Nombre de chambres'
                 placeholder='1, 2, 3...'
               />
@@ -154,7 +137,7 @@ export default function PropertyDetailsFirstStep({
             <div className='w-[22%]'>
               <FormikSelect
                 options={numberList}
-                name='bathroom'
+                name='selected_property.bathroom'
                 label='Nombre de salles de bain'
                 placeholder='1, 2, 3...'
               />
@@ -162,7 +145,7 @@ export default function PropertyDetailsFirstStep({
             <div className='w-[22%]'>
               <FormikSelect
                 options={numberList}
-                name='toilet'
+                name='selected_property.toilet'
                 label='Nomber de toilettes'
                 placeholder='1, 2, 3...'
               />
@@ -170,7 +153,7 @@ export default function PropertyDetailsFirstStep({
             <div className='w-[22%]'>
               <FormikSelect
                 options={numberList}
-                name='kitchen'
+                name='selected_property.kitchen'
                 label='Nombre de cuisines'
                 placeholder='1, 2, 3...'
               />
@@ -180,7 +163,7 @@ export default function PropertyDetailsFirstStep({
             <div className='w-[22%]'>
               <FormikSelect
                 options={yearList}
-                name='year_construction'
+                name='selected_property.year_construction'
                 label='Année de construction'
                 placeholder='2021, 2020, 2019...'
               />
@@ -188,7 +171,7 @@ export default function PropertyDetailsFirstStep({
             <div className='w-[22%]'>
               <FormikSelect
                 options={dpeList}
-                name='dpe'
+                name='selected_property.dpe'
                 label='DPE'
                 placeholder='A, B, C...'
               />
@@ -196,7 +179,7 @@ export default function PropertyDetailsFirstStep({
             <div className='w-[22%]'>
               <FormikSelect
                 options={surfaceList}
-                name='land_size'
+                name='selected_property.land_size'
                 label='Taille du terrain'
                 placeholder='200m² min'
               />
@@ -207,7 +190,7 @@ export default function PropertyDetailsFirstStep({
                   label: status.name,
                   value: status.status_id,
                 }))}
-                name='status_id'
+                name='selected_property.status_id'
                 label='Statut'
                 placeholder='Location, Vente...'
               />
@@ -216,72 +199,118 @@ export default function PropertyDetailsFirstStep({
           <div className='flex w-full justify-center'>
             <div className=' w-4/5 flex flex-wrap justify-center'>
               <div className={`my-3 whitespace-nowrap mx-1`}>
-                <FormikCheckbox name='elevator' label='properties.elevator' />
-              </div>
-              <div className={`my-3 whitespace-nowrap mx-1`}>
-                <FormikCheckbox name='terrace' label='properties.terace' />
-              </div>
-              <div className={`my-3 whitespace-nowrap mx-1`}>
-                <FormikCheckbox name='balcony' label='properties.balcony' />
-              </div>
-              <div className={`my-3 whitespace-nowrap mx-1`}>
-                <FormikCheckbox name='cellar' label='properties.cellar' />
-              </div>
-              <div className={`my-3 whitespace-nowrap mx-1`}>
-                <FormikCheckbox name='parking' label='properties.parking' />
-              </div>
-              <div className={`my-3 whitespace-nowrap mx-1`}>
-                <FormikCheckbox name='garden' label='properties.garden' />
-              </div>
-              <div className={`my-3 whitespace-nowrap mx-1`}>
-                <FormikCheckbox name='garage' label='properties.garage' />
-              </div>
-              <div className={`my-3 whitespace-nowrap mx-1`}>
-                <FormikCheckbox name='pool' label='properties.swimmingPool' />
-              </div>
-              <div className={`my-3 whitespace-nowrap mx-1`}>
-                <FormikCheckbox name='caretaker' label='properties.keeper' />
+                <FormikCheckbox
+                  name='selected_property.elevator'
+                  label='properties.elevator'
+                />
               </div>
               <div className={`my-3 whitespace-nowrap mx-1`}>
                 <FormikCheckbox
-                  name='fiber_deployed'
+                  name='selected_property.terrace'
+                  label='properties.terace'
+                />
+              </div>
+              <div className={`my-3 whitespace-nowrap mx-1`}>
+                <FormikCheckbox
+                  name='selected_property.balcony'
+                  label='properties.balcony'
+                />
+              </div>
+              <div className={`my-3 whitespace-nowrap mx-1`}>
+                <FormikCheckbox
+                  name='selected_property.cellar'
+                  label='properties.cellar'
+                />
+              </div>
+              <div className={`my-3 whitespace-nowrap mx-1`}>
+                <FormikCheckbox
+                  name='selected_property.parking'
+                  label='properties.parking'
+                />
+              </div>
+              <div className={`my-3 whitespace-nowrap mx-1`}>
+                <FormikCheckbox
+                  name='selected_property.garden'
+                  label='properties.garden'
+                />
+              </div>
+              <div className={`my-3 whitespace-nowrap mx-1`}>
+                <FormikCheckbox
+                  name='selected_property.garage'
+                  label='properties.garage'
+                />
+              </div>
+              <div className={`my-3 whitespace-nowrap mx-1`}>
+                <FormikCheckbox
+                  name='selected_property.pool'
+                  label='properties.swimmingPool'
+                />
+              </div>
+              <div className={`my-3 whitespace-nowrap mx-1`}>
+                <FormikCheckbox
+                  name='selected_property.caretaker'
+                  label='properties.keeper'
+                />
+              </div>
+              <div className={`my-3 whitespace-nowrap mx-1`}>
+                <FormikCheckbox
+                  name='selected_property.fiber_deployed'
                   label='properties.fiber'
                 />
               </div>
               <div className={`my-3 whitespace-nowrap mx-1`}>
-                <FormikCheckbox name='duplex' label='properties.duplex' />
+                <FormikCheckbox
+                  name='selected_property.duplex'
+                  label='properties.duplex'
+                />
               </div>
               <div className={`my-3 whitespace-nowrap mx-1`}>
                 <FormikCheckbox
-                  name='ground_floor'
+                  name='selected_property.ground_floor'
                   label='properties.groundFloor'
                 />
               </div>
               <div className={`my-3 whitespace-nowrap mx-1`}>
-                <FormikCheckbox name='top_floor' label='properties.lastFloor' />
+                <FormikCheckbox
+                  name='selected_property.top_floor'
+                  label='properties.lastFloor'
+                />
               </div>
               <div className={`my-3 whitespace-nowrap mx-1`}>
                 <FormikCheckbox
-                  name='life_annuity'
+                  name='selected_property.life_annuity'
                   label='properties.lifeAnnuity'
                 />
               </div>
               <div className={`my-3 whitespace-nowrap mx-1`}>
-                <FormikCheckbox name='work_done' label='properties.workDone' />
+                <FormikCheckbox
+                  name='selected_property.work_done'
+                  label='properties.workDone'
+                />
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div className='flex w-2/12 justify-between mt-2'>
+      <div className='w-2/12 flex justify-between fixed bottom-5'>
         <Button
-          text='Quitter'
-          onClick={() =>
+          text='Retour'
+          onClick={() => {
+            setFieldValue('property_id', null)
+            setFieldValue('new_owner_id', null)
+            setFieldValue('new_owner', false)
+            setFieldValue('tenant_id', null)
             dispatch(setSelectedPropertyId({ selectedPropertyId: null }))
-          }
+            setStep(1)
+          }}
         />
-        <Button text='Suivant' onClick={() => setStep(2)} />
+        <Button
+          text='Suivant'
+          onClick={() => {
+            setStep(2)
+          }}
+        />
       </div>
-    </>
+    </div>
   )
 }

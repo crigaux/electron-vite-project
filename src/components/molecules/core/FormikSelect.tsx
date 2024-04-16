@@ -16,6 +16,7 @@ export default function FormikSelect({
   placeholder,
   disabled = false,
   label,
+  onValueChange,
 }: {
   name: string
   options: ((values: FormikValues) => Option[]) | Option[]
@@ -74,41 +75,45 @@ export default function FormikSelect({
   }
 
   return (
-    <>
-      <div className='w-full max-w-xs'>
-        {label && <label className='text-neutral-900'>{label}</label>}
-        <div className='relative'>
-          <select
-            {...field}
-            name={field.name}
-            value={field.value || ''}
-            placeholder={placeholder ? t(placeholder) : ''}
-            disabled={disabled}
-            onClick={toggleOptions}
-            className={`input input-bordered w-full max-w-xs ${
-              field.value ? 'text-neutral-900' : 'text-neutral-300'
-            } placeholder-neutral-300  appearance-none`}
-            onChange={(e) => {
-              field.onChange(e)
-              toggleOptions()
-            }}
-            onBlur={() => {
-              toggleOptions()
-            }}
-          >
-            {getOptions()}
-          </select>
+    <div className='w-full max-w-xs flex flex-col'>
+      {label && (
+        <label className={!disabled ? `text-neutral-900` : `text-neutral-500`}>
+          {label}
+        </label>
+      )}
+      <div className='relative'>
+        <select
+          {...field}
+          name={field.name}
+          value={field.value || ''}
+          placeholder={placeholder ? t(placeholder) : ''}
+          disabled={disabled}
+          onClick={toggleOptions}
+          className={`input input-bordered w-full max-w-xs ${
+            field.value ? 'text-neutral-900' : 'text-neutral-300'
+          } placeholder-neutral-300  appearance-none`}
+          onChange={(e) => {
+            field.onChange(e)
+            toggleOptions()
+            onValueChange?.(e.target.value)
+          }}
+          onBlur={() => {
+            toggleOptions()
+          }}
+        >
+          {getOptions()}
+        </select>
+        {!disabled && (
           <div
             className={`w-fit input-icon absolute right-5 top-1/2 -translate-y-1/2`}
           >
             <Arrow rotate={showOptions} />
           </div>
-        </div>
+        )}
       </div>
-
-      {meta.touched && meta.error ? (
+      {meta.error ? (
         <div className='text-xs text-error'>{t(meta.error)}</div>
       ) : null}
-    </>
+    </div>
   )
 }

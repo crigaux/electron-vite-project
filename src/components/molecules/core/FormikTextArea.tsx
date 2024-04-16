@@ -19,7 +19,11 @@ export default function FormikTextArea({
 
   return (
     <>
-      {label && <label className='text-neutral-900'>{label}</label>}
+      {label && (
+        <label className={!disabled ? 'text-neutral-900' : 'text-neutral-500'}>
+          {label}
+        </label>
+      )}
       <textarea
         name={field.name}
         value={field.value ? field.value.replace(/<[^>]+>/g, '') : '' || ''}

@@ -1,14 +1,17 @@
 import { useFormikContext } from 'formik'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { RoleSerializerRead, UserSerializerRead } from '../../../api'
 import Searchbar from '../../../components/organisms/Searchbar'
 import { setSelectedConversationId } from '../../../features/messages/messageSlice'
 import { useGetRolesQuery } from '../../../features/role/roleApi'
-import { useGetUserByFilterQuery } from '../../../features/user/userApi'
-import { useAppDispatch } from '../../../store/store'
+import { useAppDispatch, useAppSelector } from '../../../store/store'
 import UserCard from '../components/UserCard'
 import Button from '../../../components/atoms/Button'
-import { setSelectedUserId } from '../../../features/user/userSlice'
+import {
+  selectedUserId,
+  setSelectedUserId,
+} from '../../../features/user/userSlice'
+import { useLazyGetUserByFilterQuery } from '../../../features/user/userApi'
 
 export default function UsersManagement({
   handleAppointment,
@@ -19,7 +22,11 @@ export default function UsersManagement({
 }): JSX.Element {
   const dispatch = useAppDispatch()
 
+  const userId = useAppSelector(selectedUserId) as number
+
   const { values } = useFormikContext<{ searchUser: string }>()
+
+  const [users, setUsers] = useState<UserSerializerRead[]>([])
 
   const currentAgency = JSON.parse(
     localStorage.getItem('user') as string,
@@ -30,9 +37,18 @@ export default function UsersManagement({
     (role: RoleSerializerRead) => role.name === 'USER',
   )?.role_id
 
-  const users =
-    useGetUserByFilterQuery({ role: userRole, agency_id: currentAgency })
-      .data || []
+  const [triggerGetUsersQuery, getUsersQueryResults] =
+    useLazyGetUserByFilterQuery()
+
+  useEffect(() => {
+    triggerGetUsersQuery({ role: userRole, agency_id: currentAgency })
+  }, [userRole, currentAgency, userId])
+
+  useEffect(() => {
+    if (getUsersQueryResults.data) {
+      setUsers(getUsersQueryResults.data)
+    }
+  }, [getUsersQueryResults.data])
 
   const filteredUsers = useMemo(() => {
     if (values.searchUser?.length < 3) return users

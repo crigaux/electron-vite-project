@@ -4,12 +4,16 @@ import { useLazyGetPropertyByFilterQuery } from '../../../features/property/prop
 import { PropertySerializerRead } from '../../../api/index.ts'
 import PropertiesManagement from './PropertiesManagement.tsx'
 import { PropertyFormikType } from '../type.ts'
-import { useAppDispatch } from '../../../store/store.ts'
-import { setSearchFilter } from '../../../features/property/propertySlice.ts'
+import { useAppDispatch, useAppSelector } from '../../../store/store.ts'
+import {
+  selectedPropertyId,
+  setSearchFilter,
+} from '../../../features/property/propertySlice.ts'
 
 export default function PropertiesManagementStep() {
   const dispatch = useAppDispatch()
 
+  const propertyId = useAppSelector(selectedPropertyId)
   useEffect(() => {
     dispatch(
       setSearchFilter({
@@ -26,7 +30,7 @@ export default function PropertiesManagementStep() {
 
   useEffect(() => {
     triggerProperties({})
-  }, [])
+  }, [propertyId])
 
   useEffect(() => {
     if (propertiesQuery.data?.length) {

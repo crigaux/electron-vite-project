@@ -56,6 +56,7 @@ export default function LoginManagement({
               placeholder={t('connection.password')}
               showPassword={() => setShowPassword(!showPassword)}
               icon={<Password />}
+              handleKeyDown={() => login()}
             />
           </div>
           <div className='pt-8'>

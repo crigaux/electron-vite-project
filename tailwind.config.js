@@ -36,7 +36,7 @@ module.exports = {
           '.btn': {
             'border-radius': '7.5px',
             padding: '10px 14px',
-            'text-transform': 'capitalize',
+            'text-transform': 'none',
           },
 
           // set bg color if disabled

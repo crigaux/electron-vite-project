@@ -42,7 +42,11 @@ export default function DashboardProperties({
         <Arrow className='rotate-90 opacity-80' bigIcons />
       </div>
       {properties?.map((property) => (
-        <PropertyCard property={property} handleClick={handlePropertyClick} />
+        <PropertyCard
+          key={property?.property_id}
+          property={property}
+          handleClick={handlePropertyClick}
+        />
       ))}
       <div
         className='absolute right-[10px] top-[50%] cursor-pointer -translate-y-[50%]'

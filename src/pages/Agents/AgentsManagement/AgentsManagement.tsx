@@ -34,6 +34,10 @@ export default function AgentsManagement({
   const [triggerGetUsersQuery, getUsersQueryResults] =
     useLazyGetUserByFilterQuery()
 
+  const currentUser = JSON.parse(
+    localStorage.getItem('user') ?? '{}',
+  ) as UserSerializerRead
+
   const currentAgency = JSON.parse(
     localStorage.getItem('user') as string,
   ).agency_id
@@ -87,22 +91,24 @@ export default function AgentsManagement({
         </div>
       </div>
       <div className='flex flex-col gap-4 items-center w-full h-full overflow-scroll no-scrollbar py-4'>
-        {filteredAgents.map((agent: UserSerializerRead) => (
-          <div key={agent.user_id} className='w-11/12'>
-            <AgentCard
-              agent={agent}
-              handleAppointment={handleAppointment}
-              handleContact={() => {
-                dispatch(
-                  setSelectedConversationId({
-                    selectedConversationId: agent.user_id as number,
-                  }),
-                )
-                handleContact()
-              }}
-            />
-          </div>
-        ))}
+        {filteredAgents
+          .filter((agent) => agent?.user_id !== currentUser?.user_id)
+          .map((agent: UserSerializerRead) => (
+            <div key={agent.user_id} className='w-11/12'>
+              <AgentCard
+                agent={agent}
+                handleAppointment={handleAppointment}
+                handleContact={() => {
+                  dispatch(
+                    setSelectedConversationId({
+                      selectedConversationId: agent.user_id as number,
+                    }),
+                  )
+                  handleContact()
+                }}
+              />
+            </div>
+          ))}
       </div>
     </div>
   )

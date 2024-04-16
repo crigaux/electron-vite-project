@@ -4,6 +4,7 @@ import useHomeFormik from './hooks/useHomeFormik.ts'
 import { APP_ROUTES } from '../../routes/routes.ts'
 import TopBarDraggable from '../../components/atoms/TopBarDraggable.tsx'
 import HomeManagement from './HomeManagement/HomeManagement.tsx'
+import { UserLocationProvider } from '../../contexts/UserLocationProvider.tsx'
 
 export default function Home(): JSX.Element {
   const navigate = useNavigate()
@@ -16,9 +17,11 @@ export default function Home(): JSX.Element {
   }
 
   return (
-    <FormikProvider value={homeFormik}>
-      <TopBarDraggable />
-      <HomeManagement />
-    </FormikProvider>
+    <UserLocationProvider>
+      <FormikProvider value={homeFormik}>
+        <TopBarDraggable />
+        <HomeManagement />
+      </FormikProvider>
+    </UserLocationProvider>
   )
 }

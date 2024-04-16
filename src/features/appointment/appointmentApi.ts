@@ -16,10 +16,39 @@ const appointmentApi = createApi({
     getAppointments: builder.query({
       query: () => 'appointments',
     }),
+    getAppointmentById: builder.query({
+      query: (id) => `appointments/${id}`,
+    }),
+    createAppointment: builder.mutation({
+      query: (newAppointment) => ({
+        url: 'appointments',
+        method: 'POST',
+        body: newAppointment,
+      }),
+    }),
+    updateAppointment: builder.mutation({
+      query: ({ id, ...put }) => ({
+        url: `appointments/${id}`,
+        method: 'PUT',
+        body: put,
+      }),
+    }),
+    deleteAppointment: builder.mutation({
+      query: (id) => ({
+        url: `appointments/${id}`,
+        method: 'DELETE',
+      }),
+    }),
   }),
 })
 
-export const { useGetAppointmentsQuery, useLazyGetAppointmentsQuery } =
-  appointmentApi
+export const {
+  useGetAppointmentsQuery,
+  useLazyGetAppointmentsQuery,
+  useLazyGetAppointmentByIdQuery,
+  useCreateAppointmentMutation,
+  useUpdateAppointmentMutation,
+  useDeleteAppointmentMutation,
+} = appointmentApi
 
 export default appointmentApi

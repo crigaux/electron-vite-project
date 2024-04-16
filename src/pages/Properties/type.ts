@@ -29,6 +29,7 @@ export type PropertyFormikType = {
   life_annuity: boolean
   work_done: boolean
   search: string
+  property_id: number
 }
 
 export type MarkerType = {

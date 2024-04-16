@@ -49,6 +49,9 @@ export default function PropertyDetailsDetailsManagement({
         {
           method: 'POST',
           body: formData,
+          headers: {
+            contentType: 'multipart/form-data',
+          },
         },
       )
     }
@@ -105,7 +108,10 @@ export default function PropertyDetailsDetailsManagement({
                   'https://back-rently.mathieudacheux.fr/public/img/property/placeholder.png'
               }}
             />
-            <button className='fixed right-5 top-5 w-[35px] h-[35px] bg-white rounded-md text-primary font-extrabold' onClick={() => {}}>
+            <button
+              className='fixed right-5 top-5 w-[35px] h-[35px] bg-white rounded-md text-primary font-extrabold'
+              onClick={() => {}}
+            >
               ✕
             </button>
             <div
