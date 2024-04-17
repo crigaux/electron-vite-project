@@ -4,10 +4,7 @@ import { RoleSerializerRead, UserSerializerRead } from '../../../api'
 import Searchbar from '../../../components/organisms/Searchbar'
 import { setSelectedConversationId } from '../../../features/messages/messageSlice'
 import { useGetRolesQuery } from '../../../features/role/roleApi'
-import {
-  useGetUserByFilterQuery,
-  useLazyGetUserByFilterQuery,
-} from '../../../features/user/userApi'
+import { useLazyGetUserByFilterQuery } from '../../../features/user/userApi'
 import { useAppDispatch, useAppSelector } from '../../../store/store'
 import AgentCard from '../components/AgentCard'
 import Button from '../../../components/atoms/Button'
