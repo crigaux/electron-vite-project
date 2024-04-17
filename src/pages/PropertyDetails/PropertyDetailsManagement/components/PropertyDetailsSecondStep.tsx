@@ -13,7 +13,6 @@ import {
 } from '../../../../features/property/propertyApi'
 import { setSelectedPropertyId } from '../../../../features/property/propertySlice'
 import { useAppDispatch } from '../../../../store/store'
-import { useNavigate } from 'react-router-dom'
 
 export default function PropertyDetailsSecondStep({
   property,
@@ -29,7 +28,6 @@ export default function PropertyDetailsSecondStep({
   openModal: () => void
 }>) {
   const dispatch = useAppDispatch()
-  const navigation = useNavigate()
   const { values } = useFormikContext<PropertySerializerRead>()
 
   const [updateProperty] = useUpdatePropertyMutation()
