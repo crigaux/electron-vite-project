@@ -6,7 +6,6 @@ import { PropertyFormikType } from '../type.ts'
 import Button from '../../../components/atoms/Button.tsx'
 import { useAppDispatch } from '../../../store/store.ts'
 import { setSelectedPropertyId } from '../../../features/property/propertySlice.ts'
-import FormikCheckbox from '../../../components/molecules/core/FormikCheckbox.tsx'
 
 export default function PropertiesManagement({
   properties,
@@ -77,7 +76,7 @@ export default function PropertiesManagement({
                 type='checkbox'
                 className='checkbox checkbox-primary mr-2'
               />
-              <span className='text-neutral-900 font-normal'>En location</span>
+              <span className='text-neutral-900 font-normal'>Location</span>
             </label>
           </div>
           <div>
@@ -91,7 +90,7 @@ export default function PropertiesManagement({
                 type='checkbox'
                 className='checkbox checkbox-primary mr-2'
               />
-              <span className='text-neutral-900 font-normal'>Vendu</span>
+              <span className='text-neutral-900 font-normal'>Vente</span>
             </label>
           </div>
         </div>

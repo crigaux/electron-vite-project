@@ -96,9 +96,7 @@ export default function PropertyCard({
         </div>
         <div className='flex justify-between'>
           <Typography variant='h2' className='text-primary' price>
-            {property?.status_id === 6
-              ? `${property?.price} / mois`
-              : property?.price || ''}
+            {property?.price || ''}
           </Typography>
         </div>
         <div className='flex justify-between'>
