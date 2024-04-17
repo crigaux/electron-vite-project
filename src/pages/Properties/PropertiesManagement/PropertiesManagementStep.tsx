@@ -22,6 +22,10 @@ export default function PropertiesManagementStep() {
     )
   }, [])
 
+  const [isDraft, setIsDraft] = useState<boolean>(false)
+  const [isSold, setIsSold] = useState<boolean>(false)
+  const [isRented, setIsRented] = useState<boolean>(false)
+
   const [triggerProperties, propertiesQuery] = useLazyGetPropertyByFilterQuery()
 
   const { values } = useFormikContext<PropertyFormikType>()
@@ -29,8 +33,12 @@ export default function PropertiesManagementStep() {
   const [properties, setProperties] = useState<PropertySerializerRead[]>([])
 
   useEffect(() => {
-    triggerProperties({})
-  }, [propertyId])
+    triggerProperties({
+      ...(isDraft && { draft: isDraft }),
+      ...(isRented && { withRented: isRented }),
+      ...(isSold && { withSold: isSold }),
+    })
+  }, [propertyId, isDraft, isSold, isRented])
 
   useEffect(() => {
     if (propertiesQuery.data?.length) {
@@ -62,6 +70,12 @@ export default function PropertiesManagementStep() {
     <PropertiesManagement
       properties={filteredProperties}
       search={handleSearch}
+      isDraft={isDraft}
+      isSold={isSold}
+      isRented={isRented}
+      setIsDraft={setIsDraft}
+      setIsRented={setIsRented}
+      setIsSold={setIsSold}
     />
   )
 }

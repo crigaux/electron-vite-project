@@ -9,9 +9,11 @@ import { useCreateAddressMutation } from '../../../../features/address/addressAp
 import {
   useCreatePropertyMutation,
   useUpdatePropertyMutation,
+  useDeletePropertyMutation,
 } from '../../../../features/property/propertyApi'
 import { setSelectedPropertyId } from '../../../../features/property/propertySlice'
 import { useAppDispatch } from '../../../../store/store'
+import { useNavigate } from 'react-router-dom'
 
 export default function PropertyDetailsSecondStep({
   property,
@@ -26,12 +28,14 @@ export default function PropertyDetailsSecondStep({
   selectedImage: number
   openModal: () => void
 }>) {
-  const { values } = useFormikContext<PropertySerializerRead>()
   const dispatch = useAppDispatch()
+  const navigation = useNavigate()
+  const { values } = useFormikContext<PropertySerializerRead>()
 
   const [updateProperty] = useUpdatePropertyMutation()
   const [createProperty] = useCreatePropertyMutation()
   const [createAddress] = useCreateAddressMutation()
+  const [deleteProperty] = useDeletePropertyMutation()
 
   const currentAgency = JSON.parse(
     localStorage.getItem('user') as string,
@@ -150,6 +154,17 @@ export default function PropertyDetailsSecondStep({
     return true
   }
 
+  const deletePropertyById = async () => {
+    const response = (await deleteProperty(property.property_id)) as any
+
+    if (response.error) {
+      toast.error(response.error.data.message)
+      return false
+    }
+
+    return true
+  }
+
   return (
     <>
       <div className='w-full h-[250px] p-1 rounded-md' onClick={openModal}>
@@ -245,6 +260,18 @@ export default function PropertyDetailsSecondStep({
                 dispatch(setSelectedPropertyId({ selectedPropertyId: null }))
               }}
             />
+            {property?.property_id && (
+              <Button
+                text='Supprimer'
+                bgColor='bg-error'
+                bgHoverColor='hover:bg-red-300'
+                onClick={async () => {
+                  const isDeleted = await deletePropertyById()
+                  if (!isDeleted) return
+                  dispatch(setSelectedPropertyId({ selectedPropertyId: null }))
+                }}
+              />
+            )}
           </div>
         </div>
       </div>
