@@ -80,6 +80,12 @@ export default function Dashboard({
     xaxis: {
       categories: MONTHS.map((month) => t(month)),
     },
+    plotOptions: {
+      bar: {
+        borderRadius: 10,
+        columnWidth: '70%',
+      },
+    },
   }
 
   const series = [
