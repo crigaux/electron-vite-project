@@ -18,6 +18,7 @@ import { useGetUserByFilterQuery } from '../../features/user/userApi'
 import { useAppDispatch } from '../../store/store'
 import ContactCard from '../Agents/components/ContactCard'
 import DashboardProperties from './components/DashboardProperties'
+import { useGetAllAgencyFeesQuery } from '../../features/fees/feesApi'
 
 export default function Dashboard({
   handlePropertyClick,
@@ -39,8 +40,14 @@ export default function Dashboard({
   const [triggerGetProperties, getPropertiesResults] =
     useLazyGetPropertyByFilterQuery({})
 
+  const fees = useGetAllAgencyFeesQuery(currentAgency)
+
   useEffect(() => {
-    triggerGetProperties({ agency: currentAgency })
+    triggerGetProperties({
+      agency: currentAgency,
+      withRented: true,
+      withSold: true,
+    })
   }, [currentAgency])
 
   const properties = getPropertiesResults?.data as PropertySerializerRead[]
@@ -73,12 +80,18 @@ export default function Dashboard({
     xaxis: {
       categories: MONTHS.map((month) => t(month)),
     },
+    plotOptions: {
+      bar: {
+        borderRadius: 10,
+        columnWidth: '70%',
+      },
+    },
   }
 
   const series = [
     {
       name: 'Revenu Mensuel',
-      data: [15000, 10000, 2000, 0, 1000, 5000, 4000, 3000, 6000, 5000],
+      data: fees?.data ?? [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       color: '#4A43EC',
     },
   ]

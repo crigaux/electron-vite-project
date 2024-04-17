@@ -73,7 +73,11 @@ export default function AddSaleOrLocationManagementStep({
   ).agency_id
 
   useEffect(() => {
-    triggerProperties({ status_id: values?.is_sale === true ? buy : rent })
+    triggerProperties({
+      status_id: values?.is_sale === true ? buy : rent,
+      withRented: true,
+      withSold: true,
+    })
   }, [rent, buy, values?.is_sale])
 
   useEffect(() => {
@@ -134,6 +138,7 @@ export default function AddSaleOrLocationManagementStep({
         const updateResponse = (await updateProperty({
           id: property.property_id,
           owner_id: newOwner.user_id,
+          signature_date: new Date(),
         })) as any
 
         if (updateResponse.error) {
@@ -205,6 +210,7 @@ export default function AddSaleOrLocationManagementStep({
         const updateResponse = (await updateProperty({
           id: property.property_id,
           owner_id: newOwnerIdResult?.data.user_id,
+          signature_date: new Date(),
         })) as any
 
         if (updateResponse.error) {
@@ -263,6 +269,7 @@ export default function AddSaleOrLocationManagementStep({
         const updateResponse = (await updateProperty({
           id: property.property_id,
           tenant_id: tenant.user_id,
+          signature_date: new Date(),
         })) as any
 
         if (updateResponse.error) {
@@ -334,6 +341,7 @@ export default function AddSaleOrLocationManagementStep({
         const updateResponse = (await updateProperty({
           id: property.property_id,
           tenant_id: newTenantIdResult?.data.user_id,
+          signature_date: new Date(),
         })) as any
 
         if (updateResponse.error) {

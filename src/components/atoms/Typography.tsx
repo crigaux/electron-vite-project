@@ -100,5 +100,5 @@ export default function Typography({
       break
   }
 
-  return useMemo(() => element, [])
+  return useMemo(() => element, [children, variant, className, price, surface])
 }
