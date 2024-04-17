@@ -40,7 +40,11 @@ export default function Dashboard({
     useLazyGetPropertyByFilterQuery({})
 
   useEffect(() => {
-    triggerGetProperties({ agency: currentAgency })
+    triggerGetProperties({
+      agency: currentAgency,
+      withRented: true,
+      withSold: true,
+    })
   }, [currentAgency])
 
   const properties = getPropertiesResults?.data as PropertySerializerRead[]

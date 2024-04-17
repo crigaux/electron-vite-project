@@ -29,7 +29,7 @@ export default function PropertiesManagementStep() {
   const [properties, setProperties] = useState<PropertySerializerRead[]>([])
 
   useEffect(() => {
-    triggerProperties({})
+    triggerProperties({ withRented: true, withSold: true })
   }, [propertyId])
 
   useEffect(() => {

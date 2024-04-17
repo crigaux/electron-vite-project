@@ -73,7 +73,11 @@ export default function AddSaleOrLocationManagementStep({
   ).agency_id
 
   useEffect(() => {
-    triggerProperties({ status_id: values?.is_sale === true ? buy : rent })
+    triggerProperties({
+      status_id: values?.is_sale === true ? buy : rent,
+      withRented: true,
+      withSold: true,
+    })
   }, [rent, buy, values?.is_sale])
 
   useEffect(() => {
