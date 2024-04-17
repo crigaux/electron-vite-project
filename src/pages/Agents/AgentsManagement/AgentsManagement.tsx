@@ -22,6 +22,9 @@ export default function AgentsManagement({
 }): JSX.Element {
   const dispatch = useAppDispatch()
 
+  const currentRole = JSON.parse(localStorage.getItem('user') as string).role_id
+  const roles = useGetRolesQuery({}).data || []
+
   const userId = useAppSelector(selectedUserId) as number
 
   const { values } = useFormikContext<{ searchAgent: string }>()
@@ -39,10 +42,14 @@ export default function AgentsManagement({
     localStorage.getItem('user') as string,
   ).agency_id
 
-  const roles = useGetRolesQuery({}).data || []
+  const adminRole = roles.find(
+    (role: RoleSerializerRead) => role.name === 'ADMIN',
+  )?.role_id
   const agentRole = roles.find(
     (role: RoleSerializerRead) => role.name === 'AGENT',
   )?.role_id
+
+  const isUserAdmin = currentRole === adminRole
 
   useEffect(() => {
     triggerGetUsersQuery({ role: agentRole, agency_id: currentAgency })
@@ -78,13 +85,15 @@ export default function AgentsManagement({
             name='searchAgent'
             onClick={() => handleSearch({ search: values.searchAgent })}
           />
-          <Button
-            text='Ajouter'
-            className='ml-5'
-            onClick={() =>
-              dispatch(setSelectedAgentId({ selectedAgentId: -1 }))
-            }
-          />
+          {isUserAdmin && (
+            <Button
+              text='Ajouter'
+              className='ml-5'
+              onClick={() =>
+                dispatch(setSelectedAgentId({ selectedAgentId: -1 }))
+              }
+            />
+          )}
         </div>
       </div>
       <div className='flex flex-col gap-4 items-center w-full h-full overflow-scroll no-scrollbar py-4'>
