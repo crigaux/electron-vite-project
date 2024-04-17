@@ -22,7 +22,13 @@ import { toast } from 'sonner'
 import useGeneratePassword from '../../../hooks/useGeneratePassword'
 import { useCreateAddressMutation } from '../../../features/address/addressApi'
 import { useGetCountriesQuery } from '../../../features/country/countryApi'
-import { useResetPasswordMailMutation } from '../../../features/mail/mailApi'
+import {
+  useRentConfirmationOwnerMutation,
+  useRentConfirmationTenantMutation,
+  useResetPasswordMailMutation,
+  useSalesConfirmationBuyerMutation,
+  useSalesConfirmationSalerMutation,
+} from '../../../features/mail/mailApi'
 import { useGetRolesQuery } from '../../../features/role/roleApi'
 import { useAppDispatch } from '../../../store/store'
 import { setSelectedPropertyId } from '../../../features/property/propertySlice'
@@ -44,6 +50,10 @@ export default function AddSaleOrLocationManagementStep({
   const [createAddress] = useCreateAddressMutation()
   const [updateProperty] = useUpdatePropertyMutation()
   const [resetPasswordMail] = useResetPasswordMailMutation()
+  const [saleMailBuyer] = useSalesConfirmationBuyerMutation()
+  const [saleMailSaler] = useSalesConfirmationSalerMutation()
+  const [rentMailTenant] = useRentConfirmationTenantMutation()
+  const [rentMailOwner] = useRentConfirmationOwnerMutation()
 
   const statuses = useGetStatusQuery({})?.data as StatusSerializerRead[]
 
@@ -135,6 +145,28 @@ export default function AddSaleOrLocationManagementStep({
           navigateToProperties()
           dispatch(setSelectedPropertyId({ selectedPropertyId: null }))
         }
+
+        const buyerMailResult = (await saleMailBuyer({
+          property: values.selected_property,
+          new_owner: values?.new_owner_id
+            ? values?.new_owner_id
+            : (values?.new_owner.user_id as number),
+        })) as any
+
+        if (buyerMailResult.error) {
+          toast.error(buyerMailResult.error.data.message)
+        }
+
+        const salerMailResult = (await saleMailSaler({
+          property: values.selected_property,
+          new_owner: values?.new_owner_id
+            ? values?.new_owner_id
+            : (values?.new_owner.user_id as number),
+        })) as any
+
+        if (salerMailResult.error) {
+          toast.error(salerMailResult.error.data.message)
+        }
       } else {
         const password = useGeneratePassword()
 
@@ -184,6 +216,28 @@ export default function AddSaleOrLocationManagementStep({
           navigateToProperties()
           dispatch(setSelectedPropertyId({ selectedPropertyId: null }))
         }
+
+        const buyerMailResult = (await saleMailBuyer({
+          property: values.selected_property,
+          new_owner: values?.new_owner_id
+            ? values?.new_owner_id
+            : (values?.new_owner.user_id as number),
+        })) as any
+
+        if (buyerMailResult.error) {
+          toast.error(buyerMailResult.error.data.message)
+        }
+
+        const salerMailResult = (await saleMailSaler({
+          property: values.selected_property,
+          new_owner: values?.new_owner_id
+            ? values?.new_owner_id
+            : (values?.new_owner.user_id as number),
+        })) as any
+
+        if (salerMailResult.error) {
+          toast.error(salerMailResult.error.data.message)
+        }
       }
     } else {
       await updateUser({
@@ -219,6 +273,28 @@ export default function AddSaleOrLocationManagementStep({
           toast.success('La modification de la location a bien été effectuée')
           navigateToProperties()
           dispatch(setSelectedPropertyId({ selectedPropertyId: null }))
+        }
+
+        const ownerMailResult = (await rentMailOwner({
+          property: values.selected_property,
+          tenant: values?.tenant_id
+            ? values?.tenant_id
+            : (values?.tenant?.user_id as number),
+        })) as any
+
+        if (ownerMailResult.error) {
+          toast.error(ownerMailResult.error.data.message)
+        }
+
+        const tenantMailResult = (await rentMailTenant({
+          property: values.selected_property,
+          tenant: values?.tenant_id
+            ? values?.tenant_id
+            : (values?.tenant?.user_id as number),
+        })) as any
+
+        if (tenantMailResult.error) {
+          toast.error(tenantMailResult.error.data.message)
         }
       } else {
         const password = useGeneratePassword()
@@ -268,6 +344,28 @@ export default function AddSaleOrLocationManagementStep({
           toast.success('La modification de la location a bien été effectuée')
           navigateToProperties()
           dispatch(setSelectedPropertyId({ selectedPropertyId: null }))
+        }
+
+        const ownerMailResult = (await rentMailOwner({
+          property: values.selected_property,
+          tenant: values?.tenant_id
+            ? values?.tenant_id
+            : (values?.tenant?.user_id as number),
+        })) as any
+
+        if (ownerMailResult.error) {
+          toast.error(ownerMailResult.error.data.message)
+        }
+
+        const tenantMailResult = (await rentMailTenant({
+          property: values.selected_property,
+          tenant: values?.tenant_id
+            ? values?.tenant_id
+            : (values?.tenant?.user_id as number),
+        })) as any
+
+        if (tenantMailResult.error) {
+          toast.error(tenantMailResult.error.data.message)
         }
       }
     }
