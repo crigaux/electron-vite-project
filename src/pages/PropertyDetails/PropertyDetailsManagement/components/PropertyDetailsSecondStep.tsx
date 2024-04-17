@@ -263,6 +263,8 @@ export default function PropertyDetailsSecondStep({
             {property?.property_id && (
               <Button
                 text='Supprimer'
+                bgColor='bg-error'
+                bgHoverColor='hover:bg-red-300'
                 onClick={async () => {
                   const isDeleted = await deletePropertyById()
                   if (!isDeleted) return
