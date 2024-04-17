@@ -149,6 +149,7 @@ export default function PropertyDetailsSecondStep({
 
     return true
   }
+
   return (
     <>
       <div className='w-full h-[250px] p-1 rounded-md' onClick={openModal}>

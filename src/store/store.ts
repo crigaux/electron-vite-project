@@ -28,6 +28,7 @@ import statusApi from '../features/status/statusApi.ts'
 import tagApi from '../features/tag/tagApi.ts'
 import userApi from '../features/user/userApi.ts'
 import userSlice from '../features/user/userSlice.ts'
+import feesApi from '../features/fees/feesApi.ts'
 
 export const store = configureStore({
   reducer: {
@@ -50,6 +51,7 @@ export const store = configureStore({
     [roleApi.reducerPath]: roleApi.reducer,
     [sectorApi.reducerPath]: sectorApi.reducer,
     [mailApi.reducerPath]: mailApi.reducer,
+    [feesApi.reducerPath]: feesApi.reducer,
     [attachmentApi.reducerPath]: attachmentApi.reducer,
     [tagApi.reducerPath]: tagApi.reducer,
     [propertyTypeApi.reducerPath]: propertyTypeApi.reducer,
@@ -80,6 +82,7 @@ export const store = configureStore({
       .concat([statusApi.middleware])
       .concat([appointmentApi.middleware])
       .concat([appointmentTagApi.middleware])
+      .concat([feesApi.middleware])
       .concat([messageApi.middleware]),
   devTools: true,
 })

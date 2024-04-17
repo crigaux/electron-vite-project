@@ -95,8 +95,10 @@ export default function PropertyCard({
           </Typography>
         </div>
         <div className='flex justify-between'>
-          <Typography variant='h2' className='text-primary' price>
-            {property?.price || ''}
+          <Typography variant='h2' className='text-primary'>
+            {property.status_id === 6 || property.status_id === 18
+              ? `${property?.price || ''}€/mois`
+              : `${property?.price || ''}€`}
           </Typography>
         </div>
         <div className='flex justify-between'>
