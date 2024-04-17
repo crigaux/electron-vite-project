@@ -9,13 +9,11 @@ import {
   selectedPropertyId,
   setSearchFilter,
 } from '../../../features/property/propertySlice.ts'
-import PropertyDetails from '../../PropertyDetails/PropertyDetails.tsx'
 
 export default function PropertiesManagementStep() {
   const dispatch = useAppDispatch()
 
-  const selectedProperty = useAppSelector(selectedPropertyId)
-
+  const propertyId = useAppSelector(selectedPropertyId)
   useEffect(() => {
     dispatch(
       setSearchFilter({
@@ -31,16 +29,16 @@ export default function PropertiesManagementStep() {
   const [properties, setProperties] = useState<PropertySerializerRead[]>([])
 
   useEffect(() => {
-    triggerProperties({ withRented: true, withSold: true })
-  }, [selectedProperty])
+    triggerProperties({})
+  }, [propertyId])
 
   useEffect(() => {
-    if (propertiesQuery.data?.length > 0) {
+    if (propertiesQuery.data?.length) {
       setProperties(propertiesQuery.data)
     } else {
       setProperties([])
     }
-  }, [propertiesQuery?.data])
+  }, [propertiesQuery.data])
 
   const filteredProperties = useMemo(() => {
     if (values.search?.length < 3) return properties
@@ -50,7 +48,7 @@ export default function PropertiesManagementStep() {
         property?.name?.toLowerCase()?.includes(values.search?.toLowerCase()) ||
         property?.price?.toString()?.includes(values.search?.toLowerCase()),
     )
-  }, [values.search, properties, propertiesQuery.data])
+  }, [values.search, properties])
 
   const handleSearch = ({ search }: { search: string }) => {
     return properties.filter(
@@ -60,9 +58,7 @@ export default function PropertiesManagementStep() {
     )
   }
 
-  return selectedProperty ? (
-    <PropertyDetails />
-  ) : (
+  return (
     <PropertiesManagement
       properties={filteredProperties}
       search={handleSearch}

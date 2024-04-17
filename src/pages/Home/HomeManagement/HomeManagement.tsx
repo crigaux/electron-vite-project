@@ -55,7 +55,8 @@ export default function HomeManagement() {
               />
             </div>
           )}
-          {tab === 2 && <Properties />}
+          {tab === 2 &&
+            (selectedProperty ? <PropertyDetails /> : <Properties />)}
           {tab === 3 && (
             <AddSaleOrLocation navigateToProperties={handlePropertyClick} />
           )}

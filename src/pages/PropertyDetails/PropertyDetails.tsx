@@ -6,7 +6,7 @@ export default function PropertyDetails(): JSX.Element {
   const { propertyFormik } = usePropertyFormik()
 
   return (
-    <div className='w-11/12 h-full'>
+    <div className='w-11/12 h-full '>
       <FormikProvider value={propertyFormik}>
         <PropertyDetailsManagementStep />
       </FormikProvider>

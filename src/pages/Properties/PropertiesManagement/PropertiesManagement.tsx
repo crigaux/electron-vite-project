@@ -19,7 +19,7 @@ export default function PropertiesManagement({
   const dispatch = useAppDispatch()
 
   return (
-    <div className='flex flex-col items-center h-full w-[calc(100vw-280px)] pt-5 overflow-auto'>
+    <div className='flex flex-col items-center h-full w-[calc(100vw-280px)] overflow-auto'>
       <div className='flex justify-center items-center flex-wrap md:flex-nowrap h-auto w-11/12 md:h-[80px]'>
         <div className='w-full flex justify-center'>
           <Searchbar
