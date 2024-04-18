@@ -19,9 +19,15 @@ const feesApi = createApi({
         method: 'GET',
       }),
     }),
+    getAllOwnerFees: builder.query({
+      query: (currentOwner: number) => ({
+        url: `/fees/owner/${currentOwner}`,
+        method: 'GET',
+      }),
+    }),
   }),
 })
 
-export const { useGetAllAgencyFeesQuery } = feesApi
+export const { useGetAllAgencyFeesQuery, useGetAllOwnerFeesQuery } = feesApi
 
 export default feesApi

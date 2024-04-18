@@ -22,6 +22,10 @@ module.exports = {
             'box-sizing': 'border-box',
           },
 
+          '.text-overflow-ellipsis': {
+            'text-overflow': 'ellipsis',
+          },
+
           // topBarDraggable settings
           '.topBarDraggable': {
             '-webkit-app-region': 'drag',

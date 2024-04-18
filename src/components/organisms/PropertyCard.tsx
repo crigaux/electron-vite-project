@@ -81,7 +81,9 @@ export default function PropertyCard({
               'https://back-rently.mathieudacheux.fr/public/img/property/placeholder.png'
           }}
           alt='Album'
-          className='h-full w-full object-cover rounded-xl'
+          className={`h-full w-full ${
+            !mapOpened ? 'max-h-[150px]' : ''
+          } object-cover rounded-xl`}
         />
       </figure>
       <div
@@ -90,8 +92,11 @@ export default function PropertyCard({
         } flex-col justify-between`}
       >
         <div className='flex justify-between'>
-          <Typography variant='h2' className='text-secondary'>
-            {property?.name || ''}
+          <Typography
+            variant='h2'
+            className='text-secondary overflow-hidden whitespace-nowrap text-overflow text-overflow-ellipsis'
+          >
+            {property?.name ?? ''}
           </Typography>
         </div>
         <div className='flex justify-between'>
