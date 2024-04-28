@@ -6,7 +6,7 @@ export default function UserDetails(): JSX.Element {
   const { userFormik } = useUserFormik()
 
   return (
-    <div className='w-11/12 h-full'>
+    <div className='w-11/12'>
       <FormikProvider value={userFormik}>
         <UserDetailsManagementStep />
       </FormikProvider>

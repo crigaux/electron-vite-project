@@ -41,14 +41,21 @@ export default function UsersManagement({
     useLazyGetUserByFilterQuery()
 
   useEffect(() => {
-    triggerGetUsersQuery({ role: userRole, agency_id: currentAgency })
+    triggerGetUsersQuery({ role: userRole })
   }, [userRole, currentAgency, userId])
 
   useEffect(() => {
     if (getUsersQueryResults.data) {
-      setUsers(getUsersQueryResults.data)
+      setUsers(
+        getUsersQueryResults.data?.filter(
+          (user: UserSerializerRead) =>
+            user.agency_id === currentAgency || !user.agency_id,
+        ),
+      )
     }
   }, [getUsersQueryResults.data])
+
+  console.log(getUsersQueryResults)
 
   const filteredUsers = useMemo(() => {
     if (values.searchUser?.length < 3) return users

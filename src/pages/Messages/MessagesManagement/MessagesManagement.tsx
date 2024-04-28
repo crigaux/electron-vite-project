@@ -37,6 +37,10 @@ export default function MessagesManagement() {
   const [messages, setMessages] = useState<any[]>([])
   const [active, setActive] = useState<number>(0)
 
+  useEffect(() => {
+    if (selectedAgent) setActive(selectedAgent)
+  }, [selectedAgent])
+
   const currentAgency = JSON.parse(
     localStorage.getItem('user') as string,
   ).agency_id
@@ -49,7 +53,7 @@ export default function MessagesManagement() {
   const agents = (
     (useGetUserByFilterQuery({ role: agentRole, agency_id: currentAgency })
       .data as UserSerializerRead[]) || ([] as UserSerializerRead[])
-  ).filter((agent) => agent.user_id !== currentUser.user_id)
+  )?.filter((agent) => agent.user_id !== currentUser.user_id)
 
   const selectedConversation = useMemo(
     () =>
@@ -60,6 +64,7 @@ export default function MessagesManagement() {
       ),
     [active, selectedAgent],
   )
+
   const selectedConversationImg = useMemo(() => {
     return `https://back-rently.mathieudacheux.fr/public/img/agent/${selectedConversation?.user_id}/resized-avatar.png`
   }, [selectedConversation])
@@ -89,9 +94,11 @@ export default function MessagesManagement() {
     return () => {
       socket.off('message', addToMessages)
     }
-  }, [active, currentUser.user_id])
+  }, [active, currentUser.user_id, selectedConversation])
 
   const getMessages = async () => {
+    console.log(currentUser.user_id, selectedConversation?.user_id)
+
     try {
       const { data } = await triggerGetMessages({
         user_id_1: currentUser.user_id,
@@ -100,7 +107,7 @@ export default function MessagesManagement() {
 
       const uniqMessage: any[] = []
 
-      const filteredMessages = data.filter(
+      const filteredMessages = data?.filter(
         (message: any) =>
           (message.user_id_1 === currentUser.user_id &&
             message.user_id_2 === selectedConversation?.user_id) ||
@@ -108,7 +115,7 @@ export default function MessagesManagement() {
             message.user_id_2 === currentUser.user_id),
       )
 
-      filteredMessages.forEach((message: any) => {
+      filteredMessages?.forEach((message: any) => {
         if (
           !uniqMessage.find((m: any) => m.message_id === message.message_id)
         ) {
@@ -117,7 +124,7 @@ export default function MessagesManagement() {
       })
 
       if (uniqMessage?.length > 0) {
-        const bufferArray = uniqMessage.map((message: any) => ({
+        const bufferArray = uniqMessage?.map((message: any) => ({
           _id: message.message_id,
           text: message.content,
           createdAt: new Date(message.created_at),
@@ -142,7 +149,7 @@ export default function MessagesManagement() {
 
   useEffect(() => {
     getMessages()
-  }, [selectedConversation?.user_id])
+  }, [selectedConversation])
 
   const onSend = useCallback(
     ({ message }: { message: string }) => {
@@ -171,7 +178,7 @@ export default function MessagesManagement() {
     <div className='w-full h-full flex flex-col-reverse'>
       <MainContainer>
         <ConversationList>
-          {agents.map((agent: UserSerializerRead) => (
+          {agents?.map((agent: UserSerializerRead) => (
             <Conversation
               name={
                 <div className='flex items-center'>

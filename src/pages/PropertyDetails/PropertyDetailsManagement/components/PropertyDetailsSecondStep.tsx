@@ -165,7 +165,7 @@ export default function PropertyDetailsSecondStep({
 
   return (
     <>
-      <div className='w-full h-[250px] p-1 rounded-md' onClick={openModal}>
+      <div className='w-5/12 h-[250px] p-1 rounded-md' onClick={openModal}>
         {
           <img
             src={`https://back-rently.mathieudacheux.fr/public/img/property/${property?.property_id}/${images[selectedImage]}`}

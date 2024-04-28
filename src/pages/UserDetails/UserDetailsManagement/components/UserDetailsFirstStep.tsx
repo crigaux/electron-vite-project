@@ -1,5 +1,6 @@
 import { useFormikContext } from 'formik'
 import { toast } from 'sonner'
+import Chart from 'react-apexcharts'
 import { CountryModelRead, RoleSerializerRead } from '../../../../api'
 import Button from '../../../../components/atoms/Button'
 import Typography from '../../../../components/atoms/Typography'
@@ -16,9 +17,18 @@ import { useAppDispatch } from '../../../../store/store'
 import useGeneratePassword from '../../../../hooks/useGeneratePassword'
 import useFormikValidator from '../../../../hooks/useFormikValidator'
 import { useResetPasswordMailMutation } from '../../../../features/mail/mailApi'
+import { useGetAllOwnerFeesQuery } from '../../../../features/fees/feesApi.ts'
+import { MONTHS } from '../../../../constants/constants.ts'
+import { useTranslation } from 'react-i18next'
 
-export default function UserDetailsFirstStep({ user }: { user: any }) {
+export default function UserDetailsFirstStep({
+  user,
+}: Readonly<{ user: any }>) {
+  const { t } = useTranslation()
+
   const dispatch = useAppDispatch()
+
+  const ownerFees = useGetAllOwnerFeesQuery(user.user_id)
 
   const formikContext = useFormikContext<any>()
   const { values } = formikContext
@@ -48,6 +58,23 @@ export default function UserDetailsFirstStep({ user }: { user: any }) {
   const [resetPasswordMail] = useResetPasswordMailMutation()
 
   const patchUser = async () => {
+    let addressId = null
+    if (!user?.address_id) {
+      const coordonates = await getCoordonates()
+
+      const addressResponse = await createAddress({
+        address: values.way,
+        city: values.city,
+        zipcode: values.zipcode,
+        longitude: coordonates?.[0] ?? 0,
+        latitude: coordonates?.[1] ?? 0,
+      }).unwrap()
+
+      addressId = addressResponse.address_id
+
+      if (!addressResponse) return false
+    }
+
     const response = (await updateUser({
       id: user.user_id,
       name: values.name,
@@ -56,6 +83,7 @@ export default function UserDetailsFirstStep({ user }: { user: any }) {
       phone: values.phone,
       role_id: userRole,
       agency_id: currentAgency,
+      ...(addressId && { address_id: addressId }),
     })) as any
 
     if (response?.error) {
@@ -114,6 +142,29 @@ export default function UserDetailsFirstStep({ user }: { user: any }) {
     toast.success("Création de l'utilisateur réussie, un mail a été envoyé")
     return true
   }
+
+  const options = {
+    chart: {
+      id: 'basic-bar',
+    },
+    xaxis: {
+      categories: MONTHS.map((month) => t(month)),
+    },
+    plotOptions: {
+      bar: {
+        borderRadius: 10,
+        columnWidth: '70%',
+      },
+    },
+  }
+
+  const series = [
+    {
+      name: 'Revenu Mensuel',
+      data: ownerFees?.data ?? [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      color: '#4A43EC',
+    },
+  ]
 
   return (
     <>
@@ -196,6 +247,20 @@ export default function UserDetailsFirstStep({ user }: { user: any }) {
           }}
         />
       </div>
+      {ownerFees?.data && (
+        <div className='w-11/12 mt-4'>
+          <Typography variant='h1' className='text-neutral-900 mb-2'>
+            Revenus mensuels
+          </Typography>
+          <Chart
+            options={options}
+            series={series}
+            type='bar'
+            width='900px'
+            height='300px'
+          />
+        </div>
+      )}
     </>
   )
 }
